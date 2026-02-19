@@ -10,7 +10,7 @@ const Footer = () => {
     { name: 'Dashboard', path: '/dashboard' },
   ];
     return (
-        <footer className="dark:bg-gray-900 mt-auto">
+        <footer className="dark:bg-black/50 mt-auto">
       <div className="container mx-auto px-4 lg:px-0  py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
 
@@ -23,20 +23,20 @@ const Footer = () => {
               </div>
               <span className="text-xl dark:text-white font-semibold">LibrisGo</span>
             </Link>
-            <p className="text-sm dark:text-white text-muted-foreground">
+            <p className="text-sm text-gray-600 dark:text-white">
               Bringing books to your doorstep. Your trusted library delivery service.
             </p>
           </div>
 
           {/*  Links */}
           <div>
-            <h3 className="font-semibold dark:text-white mb-4">Quick Links</h3>
+            <h3 className="font-semibold  dark:text-white mb-4">Quick Links</h3>
             <ul className="space-y-2">
           
               {
                 links.map(link => (
                   <li key={link.path}>
-                    <Link to={link.path} className="text-sm text-muted-foreground hover:text-foreground dark:text-white transition-colors">
+                    <Link to={link.path} className="text-sm text-gray-600 hover:text-blue-600 dark:text-white transition-colors">
                       {link.name}
                     </Link>
                   </li>
@@ -47,8 +47,8 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold dark:text-white mb-4">Contact Us</h3>
-            <ul className="space-y-2 dark:text-white">
+            <h3 className="font-semibold  dark:text-white mb-4">Contact Us</h3>
+            <ul className="space-y-2 text-gray-600 dark:text-white">
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4 " />
                 <span>sabbirhosain209@gmail.com</span>
@@ -67,7 +67,7 @@ const Footer = () => {
           {/* Social */}
           <div>
             <h3 className="font-semibold mb-4 dark:text-white">Follow Us</h3>
-            <div className="flex gap-4 dark:text-white">
+            <div className="flex gap-4 text-gray-600 dark:text-white">
               <a
                 href="https://facebook.com"
                 className="text-muted-foreground hover:text-foreground transition-colors"

@@ -6,10 +6,10 @@
 
 * {
     transition: all 0.3s ease-in-out;
+    font-family: "Roboto", sans-serif;
 }
-* {
-   font-family: "Roboto", sans-serif;
-}
+
 .Primary-btn {
-      background: linear-gradient(135deg, #4f46e5, #9333ea);
+     background: linear-gradient(135deg, #0077b6, #00b4d8);
+
 }

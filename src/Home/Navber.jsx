@@ -1,18 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import ThemeContext from '../Context/CreateContext';
 import { Link, NavLink } from 'react-router';
+import { Moon } from 'lucide-react';
+import { span } from 'motion/react-client';
 
 const Navber = () => {
     const {theme, setTheme } = useContext(ThemeContext);
+    const [isMenuOpen, setIsMenuOpen] = useState(true);
     const toggleTheme = () => {
         setTheme(prevTheme => prevTheme === "light" ? "dark" : "light");
     }
     const navLinks = [
     { path: '/', label: 'Home' },
     { path: '/books', label: 'Books' },
-    { path: '/dashboard', label: 'Dashboard' }
+    { path: '/dashboard', label: 'Dashboard' }  
   ];
-
+   
     return (
         <nav className='lg:flex sticky top-0 z-50 w-full max-w-full overflow-hidden mx-auto bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60'>
 
@@ -35,10 +38,10 @@ const Navber = () => {
                 <div className='hidden lg:flex gap-4'>
                     {navLinks.map(link => (
                     <NavLink  key={link.path} to={link.path} 
-                    className={({isActive})=>`text-md font-medium dark:text-white transition-all duration-200 hover:text-[#0077b6] hover:scale-105  px-3 py-2 rounded-md 
+                    className={({isActive})=>`text-md font-medium dark:text-white transition-all duration-200 hover:text-[#0077b6] hover:scale-105  px-3 py-2 rounded-md text-gray-800 
                     
                     ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' :
-                     'bg-white dark:bg-gray-800'}`}>
+                     ' '}`}>
                        
                         {link.label}
                        
@@ -51,18 +54,25 @@ const Navber = () => {
 
             {/* theme button */}
             <div className='flex items-center gap-2 shrink-0'>
-            <div onClick={ 
+
+               <div onClick={ 
                 () => {
                     toggleTheme();
                 }} 
-            className="relative  bg-gray-300   w-12 h-7 border-2 border-gray-500 rounded-l-2xl rounded-r-2xl cursor-pointer p-2">
+            className={`relative  
+             ${theme === "light" ? "bg-white" : "bg-gray-800"}
+            w-12 h-7 border-2 border-gray-500 rounded-l-2xl rounded-r-2xl cursor-pointer p-2`}>
 
                 <div className={`absolute -top-3 -left-3 w-12 h-12 rounded-full 
                   flex items-center justify-center transition-transform duration-500 ease-in-out
                       ${theme === "light" ? "translate-x-5" : "translate-x-0"}`}>
 
                     {
-                        theme === "light" ? "☀️" : "🌙"
+                        theme === "light" ? 
+                        <span className="text-yellow-400">☀️</span> : 
+                        (
+                            <Moon className="text-white fill-white"></Moon>
+                        )
                     }      
                 
                 </div>
@@ -72,24 +82,34 @@ const Navber = () => {
                 <div>
 
                 </div>
-            </div>
+               </div>
 
-            {/* Login and regisratoin button */}
-             <NavLink to='/login' className={({isActive})=>`text-sm font-medium text-white transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 rounded-md hover:bg-blue-600
+
+               {/* mobile buttom */}
+                <div className='lg:hidden cursor-pointer' onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.633h16.5M3.75 12h16.5m-16.5 5.367h16.5" />
+                    </svg>
+                </div>
+                
+             {/* Login and regisratoin button */}
+               <div className='flex gap-4 items-center shrink-0'>
+                <NavLink to='/Login' className={({isActive})=>`text-sm font-medium   text-white transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 hidden lg:flex rounded-md hover:bg-blue-600
              ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
              'bg-blue-800 dark:bg-blue-500 dark:text-white'}
              `}>
                 Login
              </NavLink>
 
-             <NavLink to='/register' className={({isActive})=>`text-sm font-medium text-black transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 rounded-md hover:bg-blue-600
+             <NavLink to='/Register' className={({isActive})=>`text-sm font-medium text-black transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 hidden lg:flex rounded-md hover:bg-blue-600
              ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
              '  bg-gray-200 dark:bg-gray-700 dark:text-white'}
              `}>
                 Register
-             </NavLink>
+             </NavLink> 
+               </div>
             
-            </div>
+               </div>
 
 
 
@@ -98,8 +118,9 @@ const Navber = () => {
 
           {/* Mobile nav  */}
          
-                     <div className='lg:hidden flex w-full justify-center items-center gap-2 p-2 flex-wrap'>
-                    {navLinks.map(link => (
+            <div className={`lg:hidden flex w-full justify-center items-center gap-2 p-2 flex-wrap ${isMenuOpen ? 'block' : 'hidden'}`}>
+                   <div className="w-full flex justify-center items-center gap-2 ">
+                     {navLinks.map(link => (
                     <NavLink  key={link.path} to={link.path} 
                     className={({isActive})=>`text-md font-medium dark:text-white transition-all duration-200 hover:text-[#0077b6] hover:scale-105  px-3 py-2 mb-2 rounded-md 
                     
@@ -109,7 +130,24 @@ const Navber = () => {
                         {link.label}
                        
                     </NavLink>
-                ))}
+                     ))}
+
+                   </div>
+                  <div className='flex gap-4'>
+                    <NavLink to='/Login' className={({isActive})=>`text-sm font-medium text-white transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 rounded-md hover:bg-blue-600
+             ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
+             'bg-blue-800 dark:bg-blue-500 dark:text-white'}
+             `}>
+                Login
+             </NavLink>
+
+             <NavLink to='/Register' className={({isActive})=>`text-sm font-medium text-black transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 rounded-md hover:bg-blue-600
+             ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
+             '  bg-gray-200 dark:bg-gray-700 dark:text-white'}
+             `}>
+                Register
+           </NavLink>
+                  </div>
                 </div>
         
            
