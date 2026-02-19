@@ -1,10 +1,17 @@
+/* eslint-disable no-unused-vars */
 import { MoveRightIcon, Star } from 'lucide-react';
+import { motion } from "motion/react"
 import React from 'react';
 import { Link } from 'react-router';
 
 const LatestAdditions = () => {
     return (
-        <div className='mt-20 mb-10 flex flex-col items-center justify-center'>
+        <motion.div 
+        
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className='mt-20 mb-10 flex flex-col items-center justify-center'>
             <h1 className="text-3xl font-bold dark:text-white">Latest Additions</h1>
             <p className=" text-gray-800 mt-2">Explore our newest collection of books just added to our library</p>
 
@@ -96,7 +103,7 @@ const LatestAdditions = () => {
                         <MoveRightIcon className="ml-2 w-5 h-5" />
                     </button>
                  </Link>
-        </div>
+        </motion.div>
     );
 };
 

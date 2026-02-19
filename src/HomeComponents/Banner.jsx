@@ -1,6 +1,7 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react"
 import "swiper/css";
 import "swiper/css/navigation";
@@ -42,8 +43,8 @@ const Banner = () => {
             <SwiperSlide key={index}>
        
         <motion.div 
-         initial={{ opacity: 0, y: 20 }}
-         animate={{ opacity: 1, y: 0 }}
+         initial={{ opacity: 0, x: 20 }}
+         animate={{ opacity: 1, x: 0 }}
          transition={{ duration: 0.5 }}
         className='relative'>
             <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />

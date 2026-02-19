@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import ThemeContext from '../Context/CreateContext';
 import { Link, NavLink } from 'react-router';
 import { Moon } from 'lucide-react';
-import { span } from 'motion/react-client';
+
 
 const Navber = () => {
     const {theme, setTheme } = useContext(ThemeContext);
