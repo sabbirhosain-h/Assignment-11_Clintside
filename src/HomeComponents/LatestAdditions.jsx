@@ -13,7 +13,7 @@ const LatestAdditions = () => {
         transition={{ duration: 0.5 }}
         className='mt-20 mb-10 flex flex-col items-center justify-center'>
             <h1 className="text-3xl font-bold dark:text-white">Latest Additions</h1>
-            <p className=" text-gray-800 mt-2">Explore our newest collection of books just added to our library</p>
+            <p className=" text-gray-800 mt-2 px-5">Explore our newest collection of books just added to our library</p>
 
             <section className=' px-5 py-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                 <div className='p-4 bg-amber-50 dark:bg-gray-600 rounded-lg shadow-md hover:shadow-lg hover:scale-102 transition-all duration-300'>
@@ -97,7 +97,7 @@ const LatestAdditions = () => {
                
 
             </section>
-                 <Link to={'/AllBooks'}>
+                 <Link to={'/Books'}>
                     <button className="flex justify-center items-center mt-4 px-4 py-2 Primary-btn text-white rounded-lg hover:bg-blue-900 transition duration-300">
                         View All Books
                         <MoveRightIcon className="ml-2 w-5 h-5" />

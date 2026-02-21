@@ -70,15 +70,11 @@ const Navber = () => {
                     {
                         theme === "light" ? 
                         <span className="text-yellow-400">☀️</span> : 
-                        (
-                            <Moon className="text-white fill-white"></Moon>
-                        )
+                        (<Moon className="text-white fill-white"></Moon>)
                     }      
                 
                 </div>
 
-               
-                 
                 <div>
 
                 </div>
@@ -94,14 +90,18 @@ const Navber = () => {
                 
              {/* Login and regisratoin button */}
                <div className='flex gap-4 items-center shrink-0'>
-                <NavLink to='/Login' className={({isActive})=>`text-sm font-medium   text-white transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 hidden lg:flex rounded-md hover:bg-blue-600
-             ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
-             'bg-blue-800 dark:bg-blue-500 dark:text-white'}
-             `}>
-                Login
-             </NavLink>
+                
 
-             <NavLink to='/Register' className={({isActive})=>`text-sm font-medium text-black transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 hidden lg:flex rounded-md hover:bg-blue-600
+             <NavLink to='/Login' 
+             className={({isActive})=>`text-sm font-medium text-black transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 hidden lg:flex rounded-md hover:bg-blue-600
+             ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
+             '  bg-gray-200 dark:bg-gray-700 dark:text-white'}
+             `}>
+                Log in
+             </NavLink> 
+
+             <NavLink to='/Register' 
+             className={({isActive})=>`text-sm font-medium text-black transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 hidden lg:flex rounded-md hover:bg-blue-600
              ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
              '  bg-gray-200 dark:bg-gray-700 dark:text-white'}
              `}>
@@ -110,8 +110,6 @@ const Navber = () => {
                </div>
             
                </div>
-
-
 
           </div>
         
@@ -134,13 +132,15 @@ const Navber = () => {
 
                    </div>
                   <div className='flex gap-4'>
-                    <NavLink to='/Login' className={({isActive})=>`text-sm font-medium text-white transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 rounded-md hover:bg-blue-600
+
+
+             <NavLink to='/Login' className={({isActive})=>`text-sm font-medium text-black transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 rounded-md hover:bg-blue-600
              ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
-             'bg-blue-800 dark:bg-blue-500 dark:text-white'}
+             '  bg-gray-200 dark:bg-gray-700 dark:text-white'}
              `}>
                 Login
-             </NavLink>
-
+           </NavLink>
+           
              <NavLink to='/Register' className={({isActive})=>`text-sm font-medium text-black transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 rounded-md hover:bg-blue-600
              ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
              '  bg-gray-200 dark:bg-gray-700 dark:text-white'}
