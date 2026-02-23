@@ -1,12 +1,15 @@
 import React, { useContext, useState } from 'react';
 import ThemeContext from '../Context/CreateContext';
 import { Link, NavLink } from 'react-router';
-import { Moon } from 'lucide-react';
+import { CircleUser, Moon, User } from 'lucide-react';
+import { AuthContext } from '../Context/AuthProvider';
 
 
 const Navber = () => {
+    const {user , SignOut} = useContext(AuthContext);
     const {theme, setTheme } = useContext(ThemeContext);
     const [isMenuOpen, setIsMenuOpen] = useState(true);
+    const [show , setShow] = useState(false);
     const toggleTheme = () => {
         setTheme(prevTheme => prevTheme === "light" ? "dark" : "light");
     }
@@ -17,7 +20,9 @@ const Navber = () => {
   ];
    
     return (
-        <nav className='lg:flex sticky top-0 z-50 w-full max-w-full overflow-hidden mx-auto bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60'>
+        <nav className='lg:flex sticky top-0 z-50 w-full max-w-full mx-auto bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60'>
+
+            {/* Big sceen */}
 
           <div className='flex items-center justify-between w-full lg:px-10 lg:py-4 px-4 py-3  min-w-0'>
              
@@ -78,8 +83,40 @@ const Navber = () => {
                 <div>
 
                 </div>
-               </div>
+              </div>
 
+                 {/* user pic and mane */}
+
+                {
+                    user ? 
+                      <div 
+                      onMouseEnter={()=> setShow(true) }
+                      onMouseLeave={()=> setShow(false) }
+                      className='relative hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors duration-300 flex items-center p-1 rounded-md '>
+                    {
+                        user.photoURL ? 
+                        <img className='h-10 w-10 object-cover rounded-xl' src={user.photoURL } alt="" /> 
+                        :
+                          <CircleUser className=" w-10 h-10 text-black/70 dark:text-white dark:border-gray-700" />
+                    }
+                    {
+                        show && 
+                        <div className="absolute bg-white border rounded-md p-2 top-13 -left-20 text-sm font-medium dark:bg-gray-800 dark:text-white">
+
+                         <div className=''>
+                             
+                              {user.displayName}
+                            
+                              <span className='block text-xs text-gray-700 dark:text-gray-300'>{user.email}</span>
+                             
+                         </div>
+                         
+                        </div>
+                    }
+                  
+               </div> 
+               : ""
+                }
 
                {/* mobile buttom */}
                 <div className='lg:hidden cursor-pointer' onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -89,9 +126,17 @@ const Navber = () => {
                 </div>
                 
              {/* Login and regisratoin button */}
-               <div className='flex gap-4 items-center shrink-0'>
+               {
+                user ? 
+               
+               <button onClick={() => {
+                 SignOut();
+               }} className="text-sm font-medium text-white transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 hidden lg:flex rounded-md hover:bg-red-700 bg-red-500 ">
+                Sign Out
+              </button>
+               :
+                <div className='flex gap-4 items-center shrink-0'>
                 
-
              <NavLink to='/Login' 
              className={({isActive})=>`text-sm font-medium text-black transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 hidden lg:flex rounded-md hover:bg-blue-600
              ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
@@ -108,15 +153,19 @@ const Navber = () => {
                 Register
              </NavLink> 
                </div>
-            
-               </div>
+               }
 
+                   </div>
+             
+             
           </div>
         
 
           {/* Mobile nav  */}
          
-            <div className={`lg:hidden flex w-full justify-center items-center gap-2 p-2 flex-wrap ${isMenuOpen ? 'block' : 'hidden'}`}>
+            <div className={`lg:hidden flex w-full justify-center items-center gap-2 pb-4 flex-wrap ${isMenuOpen ? 'block' : 'hidden'}`}>
+
+
                    <div className="w-full flex justify-center items-center gap-2 ">
                      {navLinks.map(link => (
                     <NavLink  key={link.path} to={link.path} 
@@ -131,9 +180,18 @@ const Navber = () => {
                      ))}
 
                    </div>
-                  <div className='flex gap-4'>
 
-
+                 {
+                    user ? 
+                 <div>
+                     <button onClick={() => {
+                       SignOut();
+                       }} className="flex text-sm font-medium text-white transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 lg:flex rounded-md hover:bg-red-700 bg-red-500 ">
+                        Sign Out
+                     </button>
+                 </div>
+                  :
+                     <div className='flex gap-4'>
              <NavLink to='/Login' className={({isActive})=>`text-sm font-medium text-black transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 rounded-md hover:bg-blue-600
              ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
              '  bg-gray-200 dark:bg-gray-700 dark:text-white'}
@@ -144,11 +202,13 @@ const Navber = () => {
              <NavLink to='/Register' className={({isActive})=>`text-sm font-medium text-black transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 rounded-md hover:bg-blue-600
              ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' : 
              '  bg-gray-200 dark:bg-gray-700 dark:text-white'}
+           
              `}>
                 Register
            </NavLink>
                   </div>
-                </div>
+                 }
+            </div>
         
            
         </nav>

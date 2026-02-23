@@ -1,7 +1,14 @@
 import { createContext } from "react";
 
-export const ThemeContext = createContext();
-export const AuthContext = createContext();
+
+const ThemeContext = createContext(null);
+const AuthContext = createContext(null);
+
+export { AuthContext, ThemeContext };
+export default ThemeContext;
+
+
+
 
 
     
