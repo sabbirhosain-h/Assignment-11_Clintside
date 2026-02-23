@@ -7,20 +7,13 @@ import { getAuth } from "firebase/auth";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  // apiKey: import.meta.env.VITE_apiKey,
-  // authDomain: import.meta.env.VITE_authDomain,
-  // projectId: import.meta.env.VITE_projectId,
-  // storageBucket: import.meta.env.VITE_storageBucket,
-  // messagingSenderId: import.meta.env.VITE_messagingSenderId,
-  // appId: import.meta.env.VITE_appId,
-  // measurementId: import.meta.env.VITE_measurementId
-  apiKey: "AIzaSyBOiIa7P6hTTFcTufTPvulIMCyV5YYfPtA",
-  authDomain: "librisgo.firebaseapp.com",
-  projectId: "librisgo",
-  storageBucket: "librisgo.firebasestorage.app",
-  messagingSenderId: "906283122034",
-  appId: "1:906283122034:web:7c973d9068508c1ce571eb",
-  measurementId: "G-GN7WW3KV1S"
+  apiKey: import.meta.env.VITE_apiKey,
+  authDomain: import.meta.env.VITE_authDomain,
+  projectId: import.meta.env.VITE_projectId,
+  storageBucket: import.meta.env.VITE_storageBucket,
+  messagingSenderId: import.meta.env.VITE_messagingSenderId,
+  appId: import.meta.env.VITE_appId,
+  measurementId: import.meta.env.VITE_measurementId
 };  
 
 // Initialize Firebase

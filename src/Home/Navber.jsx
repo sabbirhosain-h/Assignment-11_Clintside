@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import ThemeContext from '../Context/CreateContext';
-import { Link, NavLink } from 'react-router';
+import { Link,  NavLink, useNavigate } from 'react-router';
 import { CircleUser, Moon, User } from 'lucide-react';
 import { AuthContext } from '../Context/AuthProvider';
 
@@ -10,14 +10,18 @@ const Navber = () => {
     const {theme, setTheme } = useContext(ThemeContext);
     const [isMenuOpen, setIsMenuOpen] = useState(true);
     const [show , setShow] = useState(false);
+    const Navigate = useNavigate();
     const toggleTheme = () => {
         setTheme(prevTheme => prevTheme === "light" ? "dark" : "light");
     }
     const navLinks = [
     { path: '/', label: 'Home' },
     { path: '/books', label: 'Books' },
-    { path: '/dashboard', label: 'Dashboard' }  
   ];
+   const handleSignOut = () => {
+        SignOut();
+        Navigate("/");
+   }
    
     return (
         <nav className='lg:flex sticky top-0 z-50 w-full max-w-full mx-auto bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60'>
@@ -30,7 +34,7 @@ const Navber = () => {
              <div className='flex gap-4 items-center shrink-0'>
                         <Link to='/' className='flex items-center gap-4 group'>
                             <div className=''>
-                                <img src='https://i.ibb.co.com/sdDsNMSx/download.jpg' className='w-10 h-10 rounded-xl flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 shadow-md text-white '/>
+                                <img src='../../public/Librisgo.jpg' className='w-10 h-10 rounded-xl flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 shadow-md text-white '/>
                             </div>
                             <span className='text-xl dark:text-white font-semibold text-black sm:block group-hover:text-[#0077b6] transition-colors'>
                                 LibrisGo
@@ -51,7 +55,19 @@ const Navber = () => {
                         {link.label}
                        
                     </NavLink>
-                ))}
+                    ))}
+                    {
+                        user &&   (
+                        <NavLink  to={"Dashboard"} 
+                       className={({isActive})=>`text-md font-medium dark:text-white transition-all duration-200 hover:text-[#0077b6] hover:scale-105  px-3 py-2 rounded-md text-gray-800 
+                    
+                        ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' :
+                     ' '}`}>    
+                        Dashboard
+                    </NavLink>
+                        )
+
+                    }
                 </div>
               
 
@@ -129,9 +145,7 @@ const Navber = () => {
                {
                 user ? 
                
-               <button onClick={() => {
-                 SignOut();
-               }} className="text-sm font-medium text-white transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 hidden lg:flex rounded-md hover:bg-red-700 bg-red-500 ">
+               <button onClick={handleSignOut} className="text-sm font-medium text-white transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 hidden lg:flex rounded-md hover:bg-red-700 bg-red-500 ">
                 Sign Out
               </button>
                :
@@ -184,9 +198,7 @@ const Navber = () => {
                  {
                     user ? 
                  <div>
-                     <button onClick={() => {
-                       SignOut();
-                       }} className="flex text-sm font-medium text-white transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 lg:flex rounded-md hover:bg-red-700 bg-red-500 ">
+                     <button onClick={handleSignOut} className="flex text-sm font-medium text-white transition-all duration-200 hover:text-white hover:scale-105  px-3 py-2 lg:flex rounded-md hover:bg-red-700 bg-red-500 ">
                         Sign Out
                      </button>
                  </div>

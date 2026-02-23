@@ -12,7 +12,8 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const Naviagte = useNavigate();
     const Location = useLocation();
-    Location.state = "Register";
+    const redirectPath = location.state?.from?.pathname 
+     || localStorage.getItem("redirectAfterLogin") || "/";
 
     const { setUser, register, signInWithGoogle, Update } = use(AuthContext);
      
@@ -48,7 +49,8 @@ const Register = () => {
     console.error("Registration Error:", error);
   } finally {
     setLoading(false);
-    Naviagte(Location.state ? Location.state : "/");
+    Naviagte(redirectPath, { replace: true });
+    localStorage.removeItem("redirectAfterLogin");
   }
 };
 
@@ -57,8 +59,8 @@ const Register = () => {
     .then(result => {
         const googleuser = result.user
         setUser(googleuser)
-       
-        Naviagte(`${Location ? Location.pathname : "/"}`)
+        Naviagte(redirectPath, { replace: true });
+        localStorage.removeItem("redirectAfterLogin");
     })
     .catch((error) => {
       alert("Google register error: " + error.message);

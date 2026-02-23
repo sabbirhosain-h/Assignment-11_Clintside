@@ -19,7 +19,7 @@ const Footer = () => {
             <Link to="/" className="flex items-center gap-2 mb-4">
             
               <div>
-                        <img className="w-10 h-10 rounded-xl text-white flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 shadow-md" src='https://i.ibb.co.com/sdDsNMSx/download.jpg' />
+                        <img className="w-10 h-10 rounded-xl text-white flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 shadow-md" src='../../public/Librisgo.jpg' />
               </div>
               <span className="text-xl dark:text-white font-semibold">LibrisGo</span>
             </Link>

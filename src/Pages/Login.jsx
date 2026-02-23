@@ -11,9 +11,9 @@ const Login = () => {
      const { setUser, signIn, signInWithGoogle} = use(AuthContext);
      const navigate = useNavigate();
      const location = useLocation();
-     console.log(location);
-     const from = location.state?.from?.pathname ;
-     console.log("Redirecting to:", from);
+    
+     const redirectPath = location.state?.from?.pathname 
+     || localStorage.getItem("redirectAfterLogin") || "/";
 
     const handleSubmit = async (e) => {  
         e.preventDefault();
@@ -30,7 +30,8 @@ const Login = () => {
            const result = await signIn(email, password); 
            setUser(result.user);
            e.target.reset();
-           navigate(location.state ? location.state : "/");
+           navigate(redirectPath, { replace: true });
+           localStorage.removeItem("redirectAfterLogin");
         } catch(error) {
            
             if (error.code === "auth/invalid-credential" || error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
@@ -42,6 +43,7 @@ const Login = () => {
             } else {
                 setError("Something went wrong. Please try again.");
             }
+            
         } finally {
             setLoading(false);
         }
@@ -52,7 +54,8 @@ const Login = () => {
        try {
           const result = await signInWithGoogle();
           setUser(result.user);
-          navigate(location.state ? location.state : "/");
+          navigate(redirectPath, { replace: true });
+          localStorage.removeItem("redirectAfterLogin");
        } catch (error) {
           setError("Google sign-in failed. Please try again." + (error.message || ""));
        }
