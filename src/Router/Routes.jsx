@@ -6,38 +6,41 @@ import SingleBook from "../Pages/SingleBook";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import PrivateRoute from "./PrivateRoute";
-import Dashboard from "../Pages/Dashboard/Dashboard";
+import DashboardLayout from "../DashboardLayout"; 
+import Profile from "../Pages/DashboardPages/Profile";
+import MyOrder from "../Pages/DashboardPages/MyOrder";
+import Invoices from "../Pages/Invoices";
+import MyWishlist from "../Pages/DashboardPages/MyWishlist";
 
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    Component: App,
+    element: <App />,
     errorElement: <h1>404 Not Found</h1>,
-    children:[
-        { index: true,
-          Component: Home
-        },
-        {
-          path: "/books",
-          Component: Books
-        },
-        {
-          path: "/SingleBook",
-          Component: SingleBook
-        },
-        {
-          path: "Dashboard",
-          element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>
-        },
-        {
-          path: "/Login",
-          Component: Login
-        },
-        {
-          path: "/Register",
-          Component: Register
-        }
-    ]
+    children: [
+      { index: true, element: <Home /> },
+      { path: "books", element: <Books /> },
+      { path: "singleBook/:id", element: <SingleBook /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+
+      
+      {
+        path: "dashboard",
+        element: (
+          <PrivateRoute>
+             <DashboardLayout></DashboardLayout>
+          </PrivateRoute>
+        ),
+        children: [
+          { index: true, element: <MyOrder/>  },
+          { path: "/dashboard/profile", element: <Profile/> },
+          { path: "/dashboard/MyOrder", element: <MyOrder/> },
+          { path: "/dashboard/Invoices", element: <Invoices/> },
+          { path: "/dashboard/MyWishlist", element: <MyWishlist/> },
+        ],
+      },
+    ],
   },
 ]);
