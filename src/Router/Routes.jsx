@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
           Component: Books
         },
         {
-          path: "/books/:id",
+          path: "/SingleBook",
           Component: SingleBook
         },
         {
