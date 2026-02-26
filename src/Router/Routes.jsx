@@ -11,17 +11,20 @@ import Profile from "../Pages/DashboardPages/Profile";
 import MyOrder from "../Pages/DashboardPages/MyOrder";
 import Invoices from "../Pages/DashboardPages/Invoices";
 import MyWishlist from "../Pages/DashboardPages/MyWishlist";
+import Load from "../Pages/Load";
+import Error from "./Error";
 
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <h1>404 Not Found</h1>,
+    hydrateFallbackElement: <Load></Load>,
+    errorElement: <Error></Error>,
     children: [
       { index: true, element: <Home /> },
       { path: "books", element: <Books /> },
-      { path: "singleBook/:id", element: <SingleBook /> },
+      { path: "singleBook", element: <SingleBook /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
 

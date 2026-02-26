@@ -2,6 +2,7 @@ import { Outlet } from 'react-router'
 import './App.css'
 import Navber from './Home/Navber';
 import Footer from './Home/Footer';
+import { Toaster } from 'react-hot-toast';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Navber></Navber>
       <Outlet></Outlet>
       <Footer></Footer>
+      <Toaster />
      </div>
     </>
   )

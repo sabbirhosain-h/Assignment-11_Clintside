@@ -6,6 +6,7 @@ import ThemeContext from "../Context/CreateContext";
 
 const Sidebar = () => {
   const { user } = useContext(AuthContext);
+  
 //   const role = user?.role;
   const {isClose , setIsClose} = useContext(ThemeContext);
 
@@ -23,17 +24,20 @@ const Sidebar = () => {
     <nav className="flex flex-col">
 
       <div className="hidden md:flex   justify-end border-b border-blue-300">
-        <button className="px-2 py-3 hover:bg-slate-300 rounded-lg text-black dark:text-white" onClick={close}>
+        <button className="px-2 py-3 hover:bg-slate-200 hover:text-black rounded-lg text-black dark:text-white" onClick={close}>
          {
-          isClose ? <X/> : <MoveRightIcon></MoveRightIcon> 
+          isClose ? 
+          <MoveRightIcon></MoveRightIcon> 
+          :
+          <X/> 
          }
       </button>
       </div>
 
          {/* dashboard user info */}
-        <div className={isClose ? "hidden" : "border-b border-blue-300 p-4"}>
+         <div className={isClose ? "hidden" : "border-b border-blue-300 p-4"}>
             <div className="hidden md:flex rounded-xl bg-gray-500 dark:bg-blue-500/50 border-blue-300">
-               <div className="flex justify-center items-center ml-2 gap-2 text-blue-600">
+               <div className="flex justify-center items-center px-3 py-2 gap-2 text-blue-600">
                   <div>
                     <LayoutDashboardIcon />
                    </div>
@@ -51,8 +55,7 @@ const Sidebar = () => {
       <div className="space-y-3 p-4">
         {
         Userdashboard.map((links)=> (
-          <NavLink key={links.label} className={({isActive})=>`text-black dark:text-white flex items-center gap-3 border-b px-3 py-3 rounded-lg ${isActive ? "bg-blue-600 hover:bg-blue-500 text-white" : ""}`} to=
-           {links.path}>
+          <NavLink key={links.label} className={({isActive})=>`text-black dark:text-white flex items-center gap-3 border-b px-3 py-3 rounded-lg ${isActive ? "bg-blue-600 hover:bg-blue-500 text-white" : ""}`} to={links.path}>
 
            <div className="hidden md:block">
              {links.icon}

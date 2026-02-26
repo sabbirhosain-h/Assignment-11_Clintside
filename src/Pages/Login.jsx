@@ -29,6 +29,7 @@ const Login = () => {
         try {
            const result = await signIn(email, password); 
            setUser(result.user);
+           
            e.target.reset();
            navigate(redirectPath, { replace: true });
            localStorage.removeItem("redirectAfterLogin");

@@ -17,7 +17,7 @@ const Navber = () => {
     const navLinks = [
     { path: '/', label: 'Home' },
     { path: '/books', label: 'Books' },
-  ];
+    ];
    const handleSignOut = () => {
         SignOut();
         Navigate("/");
@@ -57,16 +57,15 @@ const Navber = () => {
                     </NavLink>
                     ))}
                     {
-                        user &&   (
-                        <NavLink  to={"Dashboard"} 
+                        user &&  (
+                        <NavLink  to={"Dashboard/MyOrder"} 
                        className={({isActive})=>`text-md font-medium dark:text-white transition-all duration-200 hover:text-[#0077b6] hover:scale-105  px-3 py-2 rounded-md text-gray-800 
                     
                         ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' :
                      ' '}`}>    
                         Dashboard
-                    </NavLink>
+                        </NavLink>
                         )
-
                     }
                 </div>
               
@@ -166,6 +165,9 @@ const Navber = () => {
              `}>
                 Register
              </NavLink> 
+
+             
+
                </div>
                }
 
@@ -183,15 +185,27 @@ const Navber = () => {
                    <div className="w-full flex justify-center items-center gap-2 ">
                      {navLinks.map(link => (
                     <NavLink  key={link.path} to={link.path} 
-                    className={({isActive})=>`text-md font-medium dark:text-white transition-all duration-200 hover:text-[#0077b6] hover:scale-105  px-3 py-2 mb-2 rounded-md 
+                    className={({isActive})=>`text-md font-medium dark:text-white transition-all duration-200 hover:text-[#0077b6] hover:scale-105  px-3 py-2 rounded-md text-gray-800 
                     
                     ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' :
-                     'bg-white dark:bg-gray-800'}`}>
+                     ' '}`}>
                        
                         {link.label}
                        
                     </NavLink>
                      ))}
+                     {
+                        user &&   (
+                        <NavLink  to={"Dashboard/MyOrder"} 
+                       className={({isActive})=>`text-md font-medium dark:text-white transition-all duration-200 hover:text-[#0077b6] hover:scale-105  px-3 py-2 rounded-md text-gray-800 
+                    
+                        ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' :
+                     ' '}`}>    
+                        Dashboard
+                    </NavLink>
+                        )
+
+                    }
 
                    </div>
 

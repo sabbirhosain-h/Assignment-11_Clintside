@@ -9,7 +9,7 @@ const DashboardLayout = () => {
         <div className='flex min-h-screen'>
             
            {/* Sidebar */}
-          <aside className={`w-25 ${isClose ? "lg:w-20" : "lg:w-64"} border border-blue-300  dark:bg-slate-900 text-white`}>
+          <aside className={`w-25 ${isClose ? "lg:w-20" : "lg:w-64"} border border-blue-300 bg-slate-100 dark:bg-slate-900 text-white`}>
             <Sidebar></Sidebar>
           </aside>
 

@@ -114,7 +114,7 @@ const SingleBook = () => {
 
                     <form onSubmit={handleOrder} className='bg-white dark:bg-gray-800 px-4 py-3 rounded-2xl space-y-4 lg:w-200'>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="name">Name</label>
+                            <label className="block label  dark:text-gray-300">Name</label>
                             <input className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                               id="name" value={user?.displayName || ''} readOnly />
                         </div>

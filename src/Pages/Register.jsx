@@ -39,11 +39,12 @@ const Register = () => {
     const result = await register(email, password); 
     const user = result.user;
     setUser(user);
-
+    
     if (user) {
       await Update(user, username, imageUrl || null);
       setUser(user);
       e.target.reset();
+      
     }
   } catch (error) {
     console.error("Registration Error:", error);

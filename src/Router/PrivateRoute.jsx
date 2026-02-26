@@ -1,6 +1,8 @@
 import React, {  useContext } from 'react';
 import { AuthContext } from '../Context/AuthProvider';
 import { Navigate, useLocation, } from 'react-router';
+import Load from '../Pages/Load';
+
 
 
 const PrivateRoute = ({ children }) => {
@@ -11,11 +13,12 @@ const PrivateRoute = ({ children }) => {
        location.pathname 
     );
     
-    const from = location.state?.from?.pathname || localStorage.getItem("redirectAfterLogin") || "/";
+    const from = location.state?.from?.pathname 
+    || localStorage.getItem("redirectAfterLogin") || "/";   
+    
+    
     if(Loading){
-        <div>
-            loading.....
-        </div>
+        return <Load/>
     }
     if (user) {
         return children;

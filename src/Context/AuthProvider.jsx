@@ -34,11 +34,8 @@ const AuthProvider = ({ children }) => {
     return signInWithPopup(auth, googleProvider);
   };
 
-  const Update = (user, name, photoURL) => {
-    return updateProfile(user, {
-      displayName: name,
-      photoURL
-    });
+  const Update = ( updateData ) => {
+    return updateProfile(auth.currentUser, updateData);
   };
 
   useEffect(() => {

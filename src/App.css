@@ -13,3 +13,34 @@
      background: linear-gradient(135deg, #0077b6, #00b4d8);
 
 }
+.label {
+    font-size: 0.875rem;      
+    font-weight: 500;      
+}
+.input-field {
+  margin-top: 0.25rem;     
+  margin-bottom: 0.25rem;     
+  display: block;            
+  width: 100%;                
+
+  padding-left: 0.75rem;        
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;         
+  padding-bottom: 0.5rem;
+
+  border-width: 1px;          
+  border-style: solid;
+  border-color: #d1d5db;      
+
+  border-radius: 0.375rem;      
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); 
+}
+
+
+.input-field:focus {
+  outline: none;                
+  border-color: #6366f1;        
+  box-shadow: 
+    0 0 0 1px #6366f1,          
+    0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
