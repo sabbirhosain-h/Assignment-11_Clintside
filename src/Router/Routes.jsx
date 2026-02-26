@@ -9,7 +9,7 @@ import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../DashboardLayout"; 
 import Profile from "../Pages/DashboardPages/Profile";
 import MyOrder from "../Pages/DashboardPages/MyOrder";
-import Invoices from "../Pages/Invoices";
+import Invoices from "../Pages/DashboardPages/Invoices";
 import MyWishlist from "../Pages/DashboardPages/MyWishlist";
 
 

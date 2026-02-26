@@ -1,18 +1,71 @@
 import { NavLink } from "react-router";
-// import { use } from "react";
 import { AuthContext } from "../Context/AuthProvider";
+import { Heart, LayoutDashboardIcon, MoveRightIcon, ReceiptIcon, ShoppingBag, User, X } from "lucide-react";
+import { useContext  } from "react";
+import ThemeContext from "../Context/CreateContext";
 
 const Sidebar = () => {
-//   const { user } = use(AuthContext);
+  const { user } = useContext(AuthContext);
 //   const role = user?.role;
+  const {isClose , setIsClose} = useContext(ThemeContext);
 
+  const Userdashboard = [
+    { path: "/dashboard/MyOrder" , label: "My Order" , icon: <ShoppingBag/>},
+    { path: "/dashboard/profile" , label: "My Profile", icon: <User/>  },
+    { path: "/dashboard/Invoices" , label: "Invoices", icon: <ReceiptIcon/>  },
+    { path: "/dashboard/MyWishlist" , label: "My Wishlist", icon: <Heart/>  },
+  ];
+
+  const close = () => {
+      setIsClose(!isClose)
+  };
   return (
-    <nav className="flex flex-col gap-2 p-4">
+    <nav className="flex flex-col">
 
-      <NavLink to="/dashboard/MyOrder">My Order</NavLink>
-      <NavLink to="/dashboard/profile">My Profile</NavLink>
-      <NavLink to="/dashboard/Invoices">Invoices</NavLink>
-      <NavLink to="/dashboard/MyWishlist">My Wishlist</NavLink>
+      <div className="hidden md:flex   justify-end border-b border-blue-300">
+        <button className="px-2 py-3 hover:bg-slate-300 rounded-lg text-black dark:text-white" onClick={close}>
+         {
+          isClose ? <X/> : <MoveRightIcon></MoveRightIcon> 
+         }
+      </button>
+      </div>
+
+         {/* dashboard user info */}
+        <div className={isClose ? "hidden" : "border-b border-blue-300 p-4"}>
+            <div className="hidden md:flex rounded-xl bg-gray-500 dark:bg-blue-500/50 border-blue-300">
+               <div className="flex justify-center items-center ml-2 gap-2 text-blue-600">
+                  <div>
+                    <LayoutDashboardIcon />
+                   </div>
+
+                   <div>
+                      <h1 className="text-white font-semibold">User Dashboard</h1>
+                      <h1 className="text-md text-white font-light">
+                        {user.displayName}
+                     </h1>
+                   </div>
+                 </div>
+             </div>
+         </div>
+
+      <div className="space-y-3 p-4">
+        {
+        Userdashboard.map((links)=> (
+          <NavLink key={links.label} className={({isActive})=>`text-black dark:text-white flex items-center gap-3 border-b px-3 py-3 rounded-lg ${isActive ? "bg-blue-600 hover:bg-blue-500 text-white" : ""}`} to=
+           {links.path}>
+
+           <div className="hidden md:block">
+             {links.icon}
+           </div>
+
+            <div className={`block lg:${isClose ? "hidden" : "block"} `}>
+              {links.label}
+           </div>
+
+          </NavLink>
+        ))
+      }
+      </div>
 
       {/* {role === "admin" && (
         <>

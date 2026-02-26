@@ -1,28 +1,16 @@
 import { BookSearch, MoveRightIcon, Star } from 'lucide-react';
 import { motion } from "motion/react"
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Link } from 'react-router';
-import useAPIs from '../Hooks/useAPIs';
+import { DataConstext } from '../Context/DataProvider';
 
 const LatestAdditions = () => {
-    const [books, setBooks] = useState([])
-
-    const instance = useAPIs();
-    useEffect(()=>{
-        const getBookData = async () => {
-            try {
-              const res = await  instance.get("/AllBooks")
-                setBooks(res.data)
-            } catch (error) {
-                console.error("pera is:" + error)
-            }
-        }
-        getBookData();
-    },[instance]);
+   
+    const {allBooks} = useContext(DataConstext);
 
     const topBooks = useMemo(() => {
-            return books.filter(book => book.rating > 4.5);
-        }, [books]);
+            return allBooks.filter(book => book.rating > 4.5);
+        }, [allBooks]);
 
     return (
         <motion.div 

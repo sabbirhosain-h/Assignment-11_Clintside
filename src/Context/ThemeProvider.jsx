@@ -3,6 +3,7 @@ import ThemeContext from './CreateContext';
 
 const ThemeProvider = ({ children }) => {
 
+    const [isClose , setIsClose] = useState(false)
 
 
     const [theme ,setTheme] = useState(()=>{
@@ -24,7 +25,9 @@ const ThemeProvider = ({ children }) => {
 
     const themeInfo = {
         theme,
-        setTheme
+        setTheme,
+        isClose,
+        setIsClose,
     }
     return (
         <ThemeContext.Provider value={themeInfo}>

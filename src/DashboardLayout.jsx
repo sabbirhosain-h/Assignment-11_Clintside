@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Sidebar from './DBComponents/Sidebar';
 import { Outlet } from 'react-router';
+import ThemeContext from './Context/CreateContext';
 
 const DashboardLayout = () => {
+  const {isClose } = useContext(ThemeContext);
     return (
         <div className='flex min-h-screen'>
             
            {/* Sidebar */}
-          <aside className="w-64 bg-slate-900 text-white">
+          <aside className={`w-25 ${isClose ? "lg:w-20" : "lg:w-64"} border border-blue-300  dark:bg-slate-900 text-white`}>
             <Sidebar></Sidebar>
           </aside>
 
