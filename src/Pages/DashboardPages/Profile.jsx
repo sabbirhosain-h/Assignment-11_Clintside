@@ -25,7 +25,11 @@ const Profile = () => {
              style: { background: '#1e293b',   color: '#fff'  },
            })  
           }).catch((err)=>{
-            console.error("Update error:", err);
+            toast("err", err , {
+              duration: 4000,
+             position: "bottom-right",
+             style: { background: '#1e293b',   color: '#fff'  },
+           })  
           })
     };
     return (
@@ -77,7 +81,7 @@ const Profile = () => {
                         value={user.email}
                         readOnly
                         type="email" />
-                        <span className='text-sm font-light ml-3 dark:text-amber-50'>Email Cannot be Changed</span>
+                        <span className='text-sm font-light ml-3 dark:text-amber-50'>Email Cannot be Changed**</span>
 
                         {/* image url */}
                         <label className='block label  dark:text-gray-300'>Profile Image URl</label>
@@ -96,6 +100,7 @@ const Profile = () => {
                         value="User"
                         readOnly
                         type="text" />
+                        <span className='text-sm font-light ml-3 dark:text-amber-50'>Only Admin can change Role**</span>
 
                         <button type='submit' className='w-full Primary-btn px-3 py-2 mt-4 rounded-2xl text-white'>
                                 Update Profile

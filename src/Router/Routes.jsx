@@ -13,6 +13,7 @@ import Invoices from "../Pages/DashboardPages/Invoices";
 import MyWishlist from "../Pages/DashboardPages/MyWishlist";
 import Load from "../Pages/Load";
 import Error from "./Error";
+import AddBooks from "../Pages/DashboardPages/AddBooks";
 
 
 export const router = createBrowserRouter([
@@ -24,10 +25,9 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "books", element: <Books /> },
-      { path: "singleBook", element: <SingleBook /> },
+      { path: "SingleBook", element: <SingleBook /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
-
       
       {
         path: "dashboard",
@@ -42,6 +42,7 @@ export const router = createBrowserRouter([
           { path: "/dashboard/MyOrder", element: <MyOrder/> },
           { path: "/dashboard/Invoices", element: <Invoices/> },
           { path: "/dashboard/MyWishlist", element: <MyWishlist/> },
+          { path: "/dashboard/AddBooks", element: <AddBooks/> },
         ],
       },
     ],

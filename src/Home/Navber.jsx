@@ -58,7 +58,7 @@ const Navber = () => {
                     ))}
                     {
                         user &&  (
-                        <NavLink  to={"Dashboard/MyOrder"} 
+                        <NavLink  to={"Dashboard"} 
                        className={({isActive})=>`text-md font-medium dark:text-white transition-all duration-200 hover:text-[#0077b6] hover:scale-105  px-3 py-2 rounded-md text-gray-800 
                     
                         ${isActive ? 'Primary-btn hover:text-white text-white rounded-md' :

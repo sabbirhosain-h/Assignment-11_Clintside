@@ -46,7 +46,7 @@ const LatestAdditions = () => {
                     </div>
                     <p className="mt-2 text-gray-400">A classic novel by F. Scott Fitzgerald that explores themes of wealth, love, and the American Dream.</p>
 
-                    <Link to={'/SingleBook'}>
+                    <Link to={`/SingleBook}`}>
                     <button className="mt-4 px-4 py-2 w-full Primary-btn text-white rounded-lg hover:bg-blue-700 transition duration-300">
                         View Details
                     </button>

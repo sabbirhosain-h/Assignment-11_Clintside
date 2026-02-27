@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 import { AuthContext } from "../Context/AuthProvider";
-import { Heart, LayoutDashboardIcon, MoveRightIcon, ReceiptIcon, ShoppingBag, User, X } from "lucide-react";
+import { Heart, LayoutDashboardIcon, MoveRightIcon, Plus, ReceiptIcon, ShoppingBag, User, X } from "lucide-react";
 import { useContext  } from "react";
 import ThemeContext from "../Context/CreateContext";
 
@@ -15,6 +15,7 @@ const Sidebar = () => {
     { path: "/dashboard/profile" , label: "My Profile", icon: <User/>  },
     { path: "/dashboard/Invoices" , label: "Invoices", icon: <ReceiptIcon/>  },
     { path: "/dashboard/MyWishlist" , label: "My Wishlist", icon: <Heart/>  },
+    { path: "/dashboard/AddBooks" , label: "Add New", icon: <Plus/>  },
   ];
 
   const close = () => {
@@ -55,7 +56,7 @@ const Sidebar = () => {
       <div className="space-y-3 p-4">
         {
         Userdashboard.map((links)=> (
-          <NavLink key={links.label} className={({isActive})=>`text-black dark:text-white flex items-center gap-3 border-b px-3 py-3 rounded-lg ${isActive ? "bg-blue-600 hover:bg-blue-500 text-white" : ""}`} to={links.path}>
+          <NavLink key={links.label} className={({isActive})=>`text-black dark:text-white flex items-center gap-3 border-b px-3 py-3 rounded-lg ${isActive ? "bg-blue-600 hover:bg-blue-500 text-white" : ""} hover:bg-amber-300` } to={links.path}>
 
            <div className="hidden md:block">
              {links.icon}

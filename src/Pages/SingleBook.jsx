@@ -39,15 +39,15 @@ const SingleBook = () => {
 
                     
                     <div>
-                        <img className='w-full hover:scale-105 rounded-2xl shadow-2xl ' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9AXD49XCs-BzwfBp99gCr60hs1WKc29RHbg&s" alt="" />
+                        <img className='w-full hover:scale-104 rounded-2xl shadow-2xl ' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9AXD49XCs-BzwfBp99gCr60hs1WKc29RHbg&s" alt="" />
                     </div>
                   
 
-                     <div className='w-full p-5 md:p-2 ' >
+                     <div className='bg-white p-5 rounded-2xl shadow-xl w-full  md:p-2 ' >
                         {/* genre */}
-                        <span className='bg-blue-600  px-3 py-2 rounded-2xl text-white'>
+                        <h1 className='bg-blue-600 w-20 px-3 py-2 rounded-2xl text-white'>
                             Fantasy
-                        </span>
+                        </h1>
 
                         {/* title */}
                         <p className='mt-12 text-3xl font-bold text-black dark:text-white'>
@@ -115,26 +115,26 @@ const SingleBook = () => {
                     <form onSubmit={handleOrder} className='bg-white dark:bg-gray-800 px-4 py-3 rounded-2xl space-y-4 lg:w-200'>
                         <div>
                             <label className="block label  dark:text-gray-300">Name</label>
-                            <input className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            <input className="input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                               id="name" value={user?.displayName || ''} readOnly />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                            <input className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                            <label className="block label dark:text-gray-300">Email</label>
+                            <input className="input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
                             id="email" value={user?.email || ''} readOnly />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</label>
+                            <label className="block label  dark:text-gray-300">Phone Number</label>
                             <input
-                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                             className="input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                 id="phone"
                                 type="tel"
                                 placeholder="Enter your phone number"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" >Delivery Address</label>
-                            <textarea  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            <label className="block label  dark:text-gray-300" >Delivery Address</label>
+                            <textarea  className="input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                 id="address"
                                 placeholder="Enter your delivery address"
                                 rows={3}
@@ -146,8 +146,7 @@ const SingleBook = () => {
                             </button>
                             <button
                                 className='px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-700 dark:text-white'
-                                onClick={() => setOrderBox(!orderBox)}
-                            >
+                                onClick={() => setOrderBox(!orderBox)}>
                                 Close
                             </button>
                         </div>
