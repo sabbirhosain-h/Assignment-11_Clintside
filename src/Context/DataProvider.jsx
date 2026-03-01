@@ -1,33 +1,34 @@
 import { createContext, useEffect, useState } from "react";
 import useAPIs from "../Hooks/useAPIs";
 
-export const DataConstext = createContext();
+export const DataContext = createContext();
 
 const DataProvider = ({children}) => {
-    const [allBooks , setAllBooks] = useState([]);
+    const [allBooks , setAllBooks] = useState({});
 
     const instance = useAPIs();
     useEffect(()=>{
         const getAllBooks = async () => {
             try {
                 const bookData = await instance.get("/AllBooks")
-                setAllBooks(bookData.data)
+                setAllBooks(bookData.data.result)
             } catch (error) {
                 console.error("para is:" , error)
             }
         }
         getAllBooks();
-    },[instance])
+    },[])
 
 
 
 const Data = {
     allBooks,
+    setAllBooks
 }  
     return (
-        <DataConstext.Provider value={Data}>
+        <DataContext.Provider value={Data}>
             {children}
-        </DataConstext.Provider>
+        </DataContext.Provider>
     )
 }
 export default DataProvider;

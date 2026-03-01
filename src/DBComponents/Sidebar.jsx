@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 import { AuthContext } from "../Context/AuthProvider";
-import { Heart, LayoutDashboardIcon, MoveRightIcon, Plus, ReceiptIcon, ShoppingBag, User, X } from "lucide-react";
+import { Book, Heart, LayoutDashboardIcon, Library, MoveRightIcon, Plus, ReceiptIcon, ShoppingBag, ShoppingBagIcon, User, User2, X } from "lucide-react";
 import { useContext  } from "react";
 import ThemeContext from "../Context/CreateContext";
 
@@ -16,6 +16,23 @@ const Sidebar = () => {
     { path: "/dashboard/Invoices" , label: "Invoices", icon: <ReceiptIcon/>  },
     { path: "/dashboard/MyWishlist" , label: "My Wishlist", icon: <Heart/>  },
     { path: "/dashboard/AddBooks" , label: "Add New", icon: <Plus/>  },
+    { path: "/dashboard/AllUsers" , label: "All Users", icon: <User2/>  },
+    { path: "/dashboard/ManageBooks" , label: "Manage Books", icon: <Library/>  },
+    { path: "/dashboard/MyBooks" , label: "My Books", icon: <Book/>  },
+    { path: "/dashboard/Order" , label: "Order", icon: <ShoppingBagIcon/>  },
+  ];
+
+  const librarian = [
+      { path: "/dashboard/AddBooks" , label: "Add New", icon: <Plus/>  },
+      { path: "/dashboard/MyBooks" , label: "My Books", icon: <Book/>  },
+      { path: "/dashboard/Order" , label: "Order", icon: <ShoppingBagIcon/>  },
+      { path: "/dashboard/profile" , label: "My Profile", icon: <User/>  },
+      
+  ];
+  const admin = [
+    { path: "/dashboard/AllUsers" , label: "All Users", icon: <User2/>  },
+    { path: "/dashboard/ManageBooks" , label: "Manage Books", icon: <Library/>  },
+    { path: "/dashboard/profile" , label: "My Profile", icon: <User/>  },
   ];
 
   const close = () => {
@@ -71,16 +88,7 @@ const Sidebar = () => {
       }
       </div>
 
-      {/* {role === "admin" && (
-        <>
-          <NavLink to="/dashboard/admin">Admin Home</NavLink>
-          <NavLink to="/dashboard/manage-users">Manage Users</NavLink>
-        </>
-      )}
-
-      {role === "moderator" && (
-        <NavLink to="/dashboard/settings">Settings</NavLink>
-      )} */}
+      
 
     </nav>
   );

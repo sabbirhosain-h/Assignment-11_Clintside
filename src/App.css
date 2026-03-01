@@ -53,3 +53,7 @@
   text-align: left;       
   font-size: medium;
 }
+.devider{
+  border-width: 1px;
+  border-color: rgb(201, 244, 244);
+}

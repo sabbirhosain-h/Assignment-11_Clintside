@@ -14,6 +14,11 @@ import MyWishlist from "../Pages/DashboardPages/MyWishlist";
 import Load from "../Pages/Load";
 import Error from "./Error";
 import AddBooks from "../Pages/DashboardPages/AddBooks";
+import AllUsers from "../Pages/DashboardPages/AllUsers";
+import ManageBooks from "../Pages/DashboardPages/ManageBooks";
+import MyBooks from "../Pages/DashboardPages/MyBooks";
+import Order from "../Pages/DashboardPages/Order";
+import Payment from "../Pages/Payment";
 
 
 export const router = createBrowserRouter([
@@ -28,6 +33,7 @@ export const router = createBrowserRouter([
       { path: "SingleBook", element: <SingleBook /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
+      { path: "Payment", element: <Payment /> },
       
       {
         path: "dashboard",
@@ -37,12 +43,16 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         children: [
-          { index: true, element: <MyOrder/>  },
+          { index: true, element: <Profile/>  },
           { path: "/dashboard/profile", element: <Profile/> },
           { path: "/dashboard/MyOrder", element: <MyOrder/> },
           { path: "/dashboard/Invoices", element: <Invoices/> },
           { path: "/dashboard/MyWishlist", element: <MyWishlist/> },
           { path: "/dashboard/AddBooks", element: <AddBooks/> },
+          { path: "/dashboard/AllUsers", element: <AllUsers/> },
+          { path: "/dashboard/ManageBooks", element: <ManageBooks/> },
+          { path: "/dashboard/MyBooks", element: <MyBooks/> },
+          { path: "/dashboard/Order", element: <Order/> },
         ],
       },
     ],

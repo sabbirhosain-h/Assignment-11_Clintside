@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const axiosInstance = axios.create({
-    baseURL : "https://the-book-heaven-server-delta.vercel.app"
-})
 const useAPIs = () => {
-    
-    return axiosInstance;
-
-}
+  return axios.create({
+    baseURL: "http://localhost:3000", // 🔥 BACKEND PORT
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
 
 export default useAPIs;

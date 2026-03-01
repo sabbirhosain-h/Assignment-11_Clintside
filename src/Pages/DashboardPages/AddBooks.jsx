@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import toast from 'react-hot-toast';
 
+import useAPIs from '../../Hooks/useAPIs';
+import { DataContext } from '../../Context/DataProvider';
+import { AuthContext } from '../../Context/AuthProvider';
+
+
 const AddBooks = () => {
+    const { allBooks , setAllBooks} = useContext(DataContext);
+    const {user} = useContext(AuthContext);
+    const instance = useAPIs();
 
     const genres = ['Fantasy', 'Mystery', 'Romance', 'Sci-Fi', 'Classic', 'Non-Fiction', 'Thriller', 'Horror', 'Biography', 'History'];
 
-    const handleAddBook = (e) => {
+    const handleAddBook = async (e) => {
          e.preventDefault();
 
          const bookName = e.target.bookname.value;
@@ -13,14 +21,30 @@ const AddBooks = () => {
          const url = e.target.url.value;
          const genra = e.target.genra.value;
          const price = e.target.price.value;
+         const rating = e.target.rating.value;
          const description = e.target.description.value;
          const status = e.target.status.value;
+         const email = user.email;
 
          
-         console.log(bookName,author,url,genra,price,description,status)
+         const newBook = { bookName , author , url , genra , price , rating ,  description , status , email };
+        console.log(newBook)
+        try {
+            const post = await instance.post("/AllBooks",  newBook   );
+
+            if( post.data.insertedId){
+                setAllBooks(...allBooks ,newBook ,)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+
+
          e.target.reset();
+
+
          toast("Book Added" , {
-              duration: 4000,
+             duration: 4000,
              position: "bottom-right",
              style: { background: '#1e293b',   color: '#fff'  },
            })
@@ -37,7 +61,7 @@ const AddBooks = () => {
                 <label className='label dark:text-white'>Book Name</label>
                 <input 
                 placeholder='Title of the Book'
-                className='input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white' id='bookname' type="text" />
+                className='input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white' name='bookname' id='bookname' type="text" />
                 </div>
 
                 {/* Author */}
@@ -45,7 +69,7 @@ const AddBooks = () => {
                 <label className='label dark:text-white'>Author Name</label>
                 <input 
                 placeholder='Name of the Author'
-                className='input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white' id='author' type="text" />
+                className='input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white' name='author' id='author' type="text" />
                 </div>
 
                 {/* Book image url */}
@@ -53,7 +77,7 @@ const AddBooks = () => {
                 <label className='label dark:text-white'>Image URL</label>
                 <input 
                 placeholder='Enter Image URL'
-                className='input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white' id='url'  type="text" />
+                className='input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white' name='url' id='url'  type="text" />
                 </div>
 
                 {/* catagory */}
@@ -63,7 +87,7 @@ const AddBooks = () => {
                     <option>Select a Genra</option>
                     {
                       genres.map((gen)=> (
-                        <option id={gen} value={gen}>{gen}</option>
+                        <option key={gen} id={gen} value={gen}>{gen}</option>
                       ))
                     }
                 </select>
@@ -74,8 +98,18 @@ const AddBooks = () => {
                 <label className='label dark:text-white'>Price ($)</label>
                 <input 
                 placeholder='0.00'
-                className='input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white' id='price' required type="number" />
+                className='input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white' name='price' id='price' required type="number" />
                 </div>
+
+                {/* Ratings */}
+                  <label className='label dark:text-white'>Rating (1-5)</label>
+                 <select name="rating"id="rating"required
+                  className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                  <option value="">Select Rating</option>
+                     {[1, 2, 3, 4, 5].map(r => (
+                        <option key={r} value={r}>{r}</option>
+                            ))}
+                 </select>
 
                 {/* description */}
                 <div className=''>
@@ -83,7 +117,7 @@ const AddBooks = () => {
                 <textarea 
                 placeholder='Enter Book Descriotion'
                 row={3}
-                className='input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white' id='description' required type="text" />
+                className='input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white' name='description' id='description' required type="text" />
                 </div>
 
                 {/* Status */}
