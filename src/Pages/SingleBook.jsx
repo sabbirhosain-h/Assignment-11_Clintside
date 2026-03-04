@@ -38,10 +38,12 @@ const SingleBook = () => {
             const address = e.target.address.value;
             const id = book._id;
             const url = book.url;
+            const author = book.author;
             const bookName = book.bookName;
             const price = (parseFloat(book.price) + parseFloat(book.price * 0.2));
 
-            const payBookData = { id, phone , address, url, bookName, price }
+            const email = user.email;
+            const payBookData = { id, phone , address, url, bookName, price , email ,author }
             
             const res = await instance.post("/payment", payBookData)
            
@@ -49,7 +51,8 @@ const SingleBook = () => {
             console.error(error);
         }
 
-        navigate(`/Payment/${id}`)
+      
+        navigate("/dashboard/MyOrder")
         setOrderBox(false);
     };
 
