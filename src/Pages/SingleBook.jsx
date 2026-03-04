@@ -1,163 +1,235 @@
-import { ArrowLeft, MoveLeft, Star, Heart } from 'lucide-react';
-import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { ArrowLeft, Star, Heart } from 'lucide-react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import { AuthContext } from '../Context/AuthProvider';
+import useAPIs from '../Hooks/useAPIs';
+import { motion, AnimatePresence } from 'framer-motion';
+
 
 const SingleBook = () => {
     const navigate = useNavigate();
-    const [wishList , setWishList] = useState(false);
-    const [orderBox , setOrderBox]= useState(false);
-    const {user} = useContext(AuthContext);
+    const [wishList, setWishList] = useState(false);
+    const [orderBox, setOrderBox] = useState(false);
+    const { user } = useContext(AuthContext);
+    const instance = useAPIs();
+    const [book, setBook] = useState(null);
+    const { id } = useParams();
    
-    const orderDialogueBox = () =>{
-        setOrderBox(true);
-    };
-    const wishlistButton = () =>{
-        setWishList(!wishList);
-    };
-    const handleOrder = (e) => {
+
+
+
+    useEffect(() => {
+        const fetchBook = async () => {
+            const bookData = await instance.get(`/AllBooks/${id}`);
+            setBook(bookData.data);
+        };
+        fetchBook();
+    }, [id]);
+    
+
+    const orderDialogueBox = () => setOrderBox(true);
+    const wishlistButton = () => setWishList(!wishList);
+
+    const handleOrder = async (e) => {
         e.preventDefault();
-        const number = e.target.phone.value;
-        const address = e.target.address.value;
-        console.log(number,address)
-        setOrderBox(!orderBox); // then order is complete close the box
-    }
+       
+        try {
+            const phone = e.target.phone.value;
+            const address = e.target.address.value;
+            const id = book._id;
+            const url = book.url;
+            const bookName = book.bookName;
+            const price = (parseFloat(book.price) + parseFloat(book.price * 0.2));
+
+            const payBookData = { id, phone , address, url, bookName, price }
+            
+            const res = await instance.post("/payment", payBookData)
+           
+        } catch (error) {
+            console.error(error);
+        }
+
+        navigate(`/Payment/${id}`)
+        setOrderBox(false);
+    };
+
     return (
-        <div className='dark:bg-black/30 px-10 py-5 space-y-4'>
-           
-           <button 
-            onClick={()=> navigate(-1)}
-             className='flex gap-2 px-3 py-2 rounded-xl hover:bg-gray-300 dark:text-white text-black'>
-            <ArrowLeft></ArrowLeft> Back
-           </button>
+        <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="dark:bg-black/20 min-h-screen px-6 lg:px-20 py-6 space-y-6">
 
-        {/* main data about book */}
+            {/* Back Button */}
+            <motion.button
+                onClick={() => navigate(-1)}
+                whileHover={{ scale: 1.05 }}
+                className="flex gap-2 px-4 py-2 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-white text-black font-medium"
+            >
+                <ArrowLeft /> Back
+            </motion.button>
 
-           <div className='min-h-screen py-8'>
+            {/* Main Book Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                {/* Book Image */}
+                <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    className="rounded-2xl overflow-hidden shadow-2xl"
+                >
+                    <img
+                        src={book?.url}
+                        alt={book?.bookName}
+                        className="w-200 h-150 lg:h-100 lg:w-150 object-cover"
+                    />
+                </motion.div>
 
-                <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 mb-12'>
+                {/* Book Details */}
+                <motion.div
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-white dark:bg-slate-700 p-6 md:p-4 rounded-2xl shadow-xl flex flex-col justify-between"
+                >
+                    {/* Genre */}
+                    <span className="bg-blue-600 text-white px-4 py-2 w-max rounded-xl font-semibold">
+                        {book?.genra || "Loading..."}
+                    </span>
 
-                    
-                    <div>
-                        <img className='w-full hover:scale-104 rounded-2xl shadow-2xl ' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9AXD49XCs-BzwfBp99gCr60hs1WKc29RHbg&s" alt="" />
+                    {/* Title */}
+                    <h1 className="mt-5 text-3xl lg:text-4xl font-bold text-black dark:text-white">
+                        {book?.bookName || "Loading..."}
+                    </h1>
+
+                    {/* Author */}
+                    <h2 className="mt-3 text-lg lg:text-xl font-medium text-gray-800 dark:text-gray-300">
+                        By {book?.author || "Loading..."}
+                    </h2>
+
+                    {/* Rating */}
+                    <div className="flex items-center mt-3">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                                key={star}
+                                className={`h-6 w-6 ${
+                                    star <= Math.round(book?.rating)
+                                        ? 'fill-yellow-400 text-yellow-400'
+                                        : 'text-gray-300'
+                                }`}
+                            />
+                        ))}
+                        <span className="ml-2 dark:text-white font-medium text-md">
+                            {book?.rating}
+                        </span>
                     </div>
-                  
 
-                     <div className='bg-white p-5 rounded-2xl shadow-xl w-full  md:p-2 ' >
-                        {/* genre */}
-                        <h1 className='bg-blue-600 w-20 px-3 py-2 rounded-2xl text-white'>
-                            Fantasy
-                        </h1>
+                    {/* Price */}
+                    <p className="mt-6 text-3xl lg:text-4xl font-bold text-black dark:text-white">
+                        ${book?.price || "Loading..."}
+                    </p>
 
-                        {/* title */}
-                        <p className='mt-12 text-3xl font-bold text-black dark:text-white'>
-                            Whispers of the Forgotten Realm
-                        </p>
-                        {/* author */}
-                        <h1 className='mt-4 mb-3 text-xl font-medium text-gray-800 dark:text-white/45'>
-                           By Elena Storm
-                        </h1>
-                        {/* ratings */}
-                        <div className="flex items-center">
-                           {[1, 2, 3, 4, 5].map((star) => (
-                               <Star key={star}
-                                className={`h-5 w-5 ${star <= Math.round(4.5)
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-gray-300'
-                            }`} />
-                            ))}
-                         <span className="ml-2 font-medium">{(4.5).toFixed(1)}</span>
-                         </div>
-                        {/* price */}
-                        <p className='mt-10 text-4xl font-bold text-black dark:text-white'>
-                            $ 5.22
-                        </p>
-                        {/* summery */}
-                        <p className='mt-8 text-md font-medium dark:text-white'>
-                            A young warrior discovers an ancient kingdom hidden beyond time, where magic demands a deadly price
-                        </p>
+                    {/* Description */}
+                    <p className="mt-5 text-gray-700 dark:text-gray-300 text-md lg:text-lg">
+                        {book?.description || "Loading..."}
+                    </p>
 
-                        {/* button */}
-                        <div className='flex gap-2 justify-center items-center mt-5'>
-
-                            <button onClick={()=>{
-                                user ? orderDialogueBox() : navigate("/Login");
-                                
-                            }}
-                            className='px-4 py-3 bg-blue-800 rounded-2xl  w-full text-white hover:bg-blue-700'>
+                    {/* Action Buttons */}
+                    <div className="flex gap-4 mt-6">
+                        <motion.button
+                            onClick={() => (user ? orderDialogueBox() : navigate("/Login"))}
+                            whileHover={{ scale: 1.05 }}
+                            className="flex-1 px-5 py-3 bg-blue-800 text-white rounded-2xl hover:bg-blue-700 font-semibold"
+                        >
                             Order Now
-                           </button>
+                        </motion.button>
 
-                           {/* wishlist */}
-                           <button onClick={wishlistButton}
-                           className={`
-                           ${wishList ?
-                            "bg-blue-700 text-white"
-                            :
-                             "bg-amber-100" }
-                           px-4 py-3 rounded-xl `}>
-                                <Heart></Heart>
-                           </button>
-                        </div>
-
+                        <motion.button
+                            onClick={wishlistButton}
+                            whileTap={{ scale: 0.9 }}
+                            className={`px-4 py-3 rounded-2xl ${
+                                wishList ? "bg-blue-700 text-white" : "bg-amber-100 text-gray-800"
+                            }`}
+                        >
+                            <Heart />
+                        </motion.button>
                     </div>
+                </motion.div>
+            </div>
 
-                </div>
+            {/* Order Modal */}
+            <AnimatePresence>
+                {orderBox && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+                    >
+                        <motion.form
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                            onSubmit={handleOrder}
+                            className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-2xl w-full max-w-lg space-y-4"
+                        >
+                            <h2 className="text-2xl font-bold dark:text-white">Place Your Order</h2>
+                            <div>
+                                <label className="block text-gray-700 dark:text-gray-300">Name</label>
+                                <input
+                                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full px-3 py-2 rounded-lg border"
+                                    value={user?.displayName || ''}
+                                    readOnly
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 dark:text-gray-300">Email</label>
+                                <input
+                                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full px-3 py-2 rounded-lg border"
+                                    value={user?.email || ''}
+                                    readOnly
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 dark:text-gray-300">Phone</label>
+                                <input
+                                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full px-3 py-2 rounded-lg border"
+                                    type="number"
+                                    name="phone"
+                                    id='phone'
+                                    placeholder="Enter your phone number"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 dark:text-gray-300">Delivery Address</label>
+                                <textarea
+                                    className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full px-3 py-2 rounded-lg border"
+                                    name="address"
+                                    id='address'
+                                    rows={3}
+                                    placeholder="Enter your delivery address"
+                                />
+                            </div>
+                            <div className="flex justify-end gap-4 mt-4">
+                                <button
+                                    type="submit"
+                                    className="px-6 py-3 bg-blue-800 text-white rounded-2xl hover:bg-blue-700 font-semibold"
+                                >
+                                    Place Order
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setOrderBox(false)}
+                                    className="px-6 py-3 bg-gray-200 dark:bg-gray-700 dark:text-white rounded-2xl hover:bg-gray-300 font-semibold"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </motion.form>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-                
-           </div>
-
-            {/* Order box */}
-           {
-             orderBox && (
-                <div className='fixed inset-0 bg-black/50 flex justify-center items-center z-50 '>
-
-                    <form onSubmit={handleOrder} className='bg-white dark:bg-gray-800 px-4 py-3 rounded-2xl space-y-4 lg:w-200'>
-                        <div>
-                            <label className="block label  dark:text-gray-300">Name</label>
-                            <input className="input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                              id="name" value={user?.displayName || ''} readOnly />
-                        </div>
-                        <div>
-                            <label className="block label dark:text-gray-300">Email</label>
-                            <input className="input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
-                            id="email" value={user?.email || ''} readOnly />
-                        </div>
-                        <div>
-                            <label className="block label  dark:text-gray-300">Phone Number</label>
-                            <input
-                             className="input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                id="phone"
-                                type="tel"
-                                placeholder="Enter your phone number"
-                            />
-                        </div>
-                        <div>
-                            <label className="block label  dark:text-gray-300" >Delivery Address</label>
-                            <textarea  className="input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                id="address"
-                                placeholder="Enter your delivery address"
-                                rows={3}
-                            />
-                        </div>
-                        <div className=' rounded-2xl p-6 shadow-2xl flex gap-2'>
-                            <button type='submit' className='px-4 py-3 bg-blue-800 rounded-2xl text-white hover:bg-blue-700'>
-                                Place Order
-                            </button>
-                            <button
-                                className='px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-700 dark:text-white'
-                                onClick={() => setOrderBox(!orderBox)}>
-                                Close
-                            </button>
-                        </div>
-                    </form>
-                    
-                </div>
-             )
-           }
-           
-
-        </div>
+        </motion.div>
     );
 };
 

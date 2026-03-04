@@ -50,7 +50,7 @@ const LatestAdditions = () => {
                     </div>
                     <p className="mt-2 text-gray-400">{book.description}</p>
 
-                    <Link to={`/SingleBook}`}>
+                    <Link to={`/Details/${book._id}`}>
                     <button className="mt-4 px-4 py-2 w-full Primary-btn text-white rounded-lg hover:bg-blue-700 transition duration-300">
                         View Details
                     </button>

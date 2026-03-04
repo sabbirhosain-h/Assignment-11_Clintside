@@ -73,7 +73,7 @@ const Sidebar = () => {
       <div className="space-y-3 p-4">
         {
         Userdashboard.map((links)=> (
-          <NavLink key={links.label} className={({isActive})=>`text-black dark:text-white flex items-center gap-3 border-b px-3 py-3 rounded-lg ${isActive ? "bg-blue-600 hover:bg-blue-500 text-white" : ""} hover:bg-amber-300` } to={links.path}>
+          <NavLink key={links.label} className={({isActive})=>`text-black dark:text-white flex items-center gap-3 border-b px-3 py-3 rounded-lg ${isActive ? "bg-blue-600 hover:bg-blue-500 text-white" : ""} hover:bg-amber-300 hover:shadow-md` } to={links.path}>
 
            <div className="hidden md:block">
              {links.icon}

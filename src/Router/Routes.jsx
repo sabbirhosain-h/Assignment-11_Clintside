@@ -19,6 +19,7 @@ import ManageBooks from "../Pages/DashboardPages/ManageBooks";
 import MyBooks from "../Pages/DashboardPages/MyBooks";
 import Order from "../Pages/DashboardPages/Order";
 import Payment from "../Pages/Payment";
+import PaySuccess from "../Pages/PaySuccess";
 
 
 export const router = createBrowserRouter([
@@ -30,10 +31,11 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "books", element: <Books /> },
-      { path: "SingleBook", element: <SingleBook /> },
+      { path: "Details/:id", element: <SingleBook /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
-      { path: "Payment", element: <Payment /> },
+      { path: "Payment/:i", element: ( <PrivateRoute><Payment /></PrivateRoute> ) },
+      { path: "PaySuccess/:i", element: ( <PrivateRoute><PaySuccess/></PrivateRoute> )  },
       
       {
         path: "dashboard",

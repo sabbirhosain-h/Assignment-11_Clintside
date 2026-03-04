@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { motion } from "motion/react"
-import { Star, User } from 'lucide-react';
+import { Star } from 'lucide-react';
 import useAPIs from '../Hooks/useAPIs';
 
 
@@ -19,10 +19,12 @@ const Books = () => {
     const instance = useAPIs();
     
     
+    
     useEffect(()=>{
       const getAllBooks = async () => {
         try {
           const res = await instance.get(`/AllBooks?skip=${currentPage * limit}&limit=${limit}&sort=${sortBy}&order=${order}&search=${search}`);
+          
           setAllBooks(res.data.result);
           setBookCount(res.data.total);
 
@@ -91,60 +93,113 @@ const Books = () => {
             }
 
             {/* all Books */}
-            <div className='mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-              {
-                allBooks.map((Book , index)=>(
-                  <motion.div
-                    key={Book._id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="p-7 dark:bg-slate-700 rounded-2xl bg-white shadow-2xl">
-                    <div className="mb-3">
-                     
-                      <img
-                        src={Book.url}
-                        className="w-full h-52 object-cover hover:scale-103 rounded"/>
-                      
-                      <div className="flex-1">
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+             {allBooks.map((Book, index) => (
+    <motion.div
+      key={Book._id}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ duration: 0.4, delay: index * 0.05 }}
+      className="p-7 bg-white dark:bg-slate-700 rounded-2xl shadow-2xl"
+    >
+      {/* Image */}
+      <motion.img
+        src={Book.url}
+        initial={{ scale: 1 }}
+        whileHover={{ scale: 1.08 }}
+        transition={{ duration: 0.4 }}
+        className="w-full h-52 object-cover rounded-lg"
+      />
 
-                        <h3 className="mt-4 isDark dark:text-white font-bold text-xl text-slate-900">
-                          {Book.bookName}</h3>
+      {/* Content */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: {},
+          visible: {
+            transition: { staggerChildren: 0.08 }
+          }
+        }}
+        className="mt-4"
+      >
+        <motion.h3
+          variants={{
+            hidden: { opacity: 0, y: 10 },
+            visible: { opacity: 1, y: 0 }
+          }}
+          className="font-bold text-xl text-slate-900 dark:text-white"
+        >
+          {Book.bookName}
+        </motion.h3>
 
-                        <p className="text-slate-600 ml-1 dark:text-slate-400 text-sm">
-                          by {Book.author}
-                        </p>
+        <motion.p
+          variants={{
+            hidden: { opacity: 0, y: 10 },
+            visible: { opacity: 1, y: 0 }
+          }}
+          className="text-slate-600 dark:text-slate-400 text-sm"
+        >
+          by {Book.author}
+        </motion.p>
 
-                        <div className="flex mt-4 items-center gap-2 mb-2">
-                          <span className="px-2 py-1 rounded text-sm isDark text-white bg-blue-600">
-                            {Book.genra}
-                          </span>
+        <motion.div
+          variants={{
+            hidden: { opacity: 0, y: 10 },
+            visible: { opacity: 1, y: 0 }
+          }}
+          className="flex items-center gap-2 mt-4 mb-2"
+        >
+          <span className="px-2 py-1 rounded text-sm text-white bg-blue-600">
+            {Book.genra}
+          </span>
 
-                          <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            <span className="text-sm isDark dark:text-white text-slate-900">
-                              {Book.rating} </span>
-                          </div>
-                        </div>
+          <div className="flex items-center gap-1">
+            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+            <span className="text-sm text-slate-900 dark:text-white">
+              {Book.rating}
+            </span>
+          </div>
+        </motion.div>
 
-                        <p className='text-sm line-clamp-3 text-slate-900'>
-                          {Book.description}
-                        </p>
+        <motion.p
+          variants={{
+            hidden: { opacity: 0, y: 10 },
+            visible: { opacity: 1, y: 0 }
+          }}
+          className="text-sm line-clamp-3 text-slate-900 dark:text-slate-300"
+        >
+          {Book.description}
+        </motion.p>
 
-                        <div className='mt-4 font-bold text-3xl dark:text-white'>
-                         ৳  {Book.price}
-                        </div>
+        <motion.div
+          variants={{
+            hidden: { opacity: 0, y: 10 },
+            visible: { opacity: 1, y: 0 }
+          }}
+          className="mt-4 font-bold text-3xl dark:text-white"
+        >
+          ৳ {Book.price}
+        </motion.div>
+      </motion.div>
 
-                      </div>
-                    </div>
-                    
-                    <button
-                      className="block w-full text-center px-4 py-2 text-white rounded-lg Primary-btn dark:text-white bg-indigo-600">
-                      View Details
-                    </button>
-                  </motion.div>
-                ))
-              }
+      {/* Button */}
+      <Link to={`/Details/${Book._id}`}>
+      <motion.button
+        whileHover={{ scale: 1.06 }}
+        whileTap={{ scale: 0.94 }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="mt-5 block w-full px-4 py-2 text-white rounded-lg bg-indigo-600"
+      >
+        View Details
+      </motion.button>
+      </Link>
+    </motion.div>
+  ))}
             </div>
               
               {/* pagination buttons */}
