@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import useAPIs from '../Hooks/useAPIs';
 import { motion } from 'motion/react';
+import toast from 'react-hot-toast';
 
 const Payment = () => {
     const [cardNum, setCardNum] = useState("");
@@ -38,12 +39,22 @@ const Payment = () => {
     const handlepayment = async (e) => {
         e.preventDefault();
         if (!paymentId) {
-            alert("Payment record not found");
+            toast("Payment record not found", {
+              duration: 4000,
+             position: "bottom-right",
+             style: { background: '#1e293b',   color: '#fff'  },
+           })  
+           
             return;
         }
         try {
             await instance.patch(`/payment/success/${i}`);
-            alert("Payment done");
+            toast("Payment Done", {
+              duration: 4000,
+             position: "bottom-right",
+             style: { background: '#1e293b',   color: '#fff'  },
+           }) 
+           
             navigate(`/PaySuccess/${i}`);
         } catch (error) {
             console.error(error);

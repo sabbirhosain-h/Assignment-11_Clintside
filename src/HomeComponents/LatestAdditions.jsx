@@ -1,20 +1,22 @@
 import { BookSearch, MoveRightIcon, Star } from 'lucide-react';
 import { motion } from "motion/react"
 import React, { useContext, useMemo } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { DataContext } from '../Context/DataProvider';
+
 
 const LatestAdditions = () => {
    
     const {allBooks} = useContext(DataContext);
-
+    const location = useLocation();
+;
     const latestBooks = useMemo(() => {
   if (!Array.isArray(allBooks)) return [];
 
   return [...allBooks]
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 3);
-}, [allBooks]);
+}, [allBooks , location.pathname]);
     
     return (
         <motion.div 

@@ -3,6 +3,7 @@ import { motion } from "motion/react"
 import useAPIs from '../../Hooks/useAPIs';
 import { AuthContext } from '../../Context/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router';
+import toast from 'react-hot-toast';
 
 const MyOrder = () => {
   const instance = useAPIs();
@@ -27,7 +28,11 @@ const MyOrder = () => {
   const cancelOrder = async (orderId) => {
     try {
       await instance.patch(`/payment/cancel/${orderId}`);
-      alert("Order canceled!");
+      toast("Order Cancled!", {
+                    duration: 4000,
+                   position: "bottom-right",
+                   style: { background: '#1e293b',   color: '#fff'  },
+                 }) 
       getAllOrderData();
     } catch (error) {
       console.error(error);
@@ -50,14 +55,14 @@ const MyOrder = () => {
       { 
         allOrders.length === 0 ? 
         ( 
-          <div className='mt-5 dark:bg-slate-900 bg-white rounded-2xl py-40 w-full gap-y-4 flex flex-col justify-center items-center '>
+          <div className='mt-5 dark:bg-slate-900 bg-white rounded-2xl py-40 w-full gap-y-4 flex flex-col justify-center items-center'>
             <h1 className='text-slate-500 font-medium'>You haven't placed any orders yet</h1>
             <Link to={"/Books"}>
             <button className='px-3 py-2 bg-blue-700 text-white rounded-xl'>
               Browse Books
             </button>
             </Link>
-      </div>
+         </div>
          ) 
         : 
         (
@@ -210,7 +215,7 @@ const MyOrder = () => {
           ))}
         </div>
 
-      </motion.div>
+          </motion.div>
         )
       }
 
