@@ -5,6 +5,7 @@ export const DataContext = createContext();
 
 const DataProvider = ({children}) => {
     const [allBooks , setAllBooks] = useState({});
+    const [wishRefetch , setWishRefetch] = useState(false)
     
 
 
@@ -25,7 +26,10 @@ const DataProvider = ({children}) => {
 
 const Data = {
     allBooks,
-    setAllBooks
+    setAllBooks,
+    wishRefetch, 
+    setWishRefetch
+
 }  
     return (
         <DataContext.Provider value={Data}>

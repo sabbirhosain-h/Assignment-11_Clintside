@@ -4,6 +4,8 @@ import { useNavigate, useParams } from 'react-router';
 import { AuthContext } from '../Context/AuthProvider';
 import useAPIs from '../Hooks/useAPIs';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
+import { DataContext } from '../Context/DataProvider';
 
 
 const SingleBook = () => {
@@ -11,24 +13,71 @@ const SingleBook = () => {
     const [wishList, setWishList] = useState(false);
     const [orderBox, setOrderBox] = useState(false);
     const { user } = useContext(AuthContext);
+    const { setWishRefetch } = useContext(DataContext);
     const instance = useAPIs();
     const [book, setBook] = useState(null);
     const { id } = useParams();
    
-
-
 
     useEffect(() => {
         const fetchBook = async () => {
             const bookData = await instance.get(`/AllBooks/${id}`);
             setBook(bookData.data);
         };
+        const checkWishlist = async () => {
+        try {
+            const res = await instance.get(`/MyWishlist?email=${user.email}`);
+            const alreadyAdded = res.data.some(book => book._id === id);
+            setWishList(alreadyAdded); 
+        } catch (error) {
+            console.error(error);
+        }
+    };
         fetchBook();
+        if (user) checkWishlist();
     }, [id]);
     
 
     const orderDialogueBox = () => setOrderBox(true);
-    const wishlistButton = () => setWishList(!wishList);
+    const wishlistButton = async () => {
+    if (!wishList) {
+        try {
+            await instance.post(`/Wishlist/${id}`);
+            setWishList(true); 
+            toast("Book Added to Wishlist", {
+                duration: 2000,
+                position: "bottom-right",
+                style: { background: '#1e293b', color: '#fff' },
+            });
+            setWishRefetch(true)
+        } catch (error) {
+            console.error("Adding to wishlist:", error);
+            toast("Failed to add to Wishlist", {
+                duration: 2000,
+                position: "bottom-right",
+                style: { background: '#ff0000', color: '#fff' },
+            });
+        }
+    } 
+     else {
+        try {
+          await instance.delete(`/Wishlist/remove/${id}`); 
+          setWishList(false);
+          toast("Removed from Wishlist", {
+            duration: 2000,
+            position: "bottom-right",
+            style: { background: '#1e293b', color: '#fff' },
+          });
+       } catch (error) {
+          console.error(error);
+           toast("Failed to remove from Wishlist", {
+               duration: 2000,
+               position: "bottom-right",
+               style: { background: '#ff0000', color: '#fff' },
+            });
+       }
+    }
+    };
 
     const handleOrder = async (e) => {
         e.preventDefault();
@@ -51,7 +100,6 @@ const SingleBook = () => {
             console.error(error);
         }
 
-      
         navigate("/dashboard/MyOrder")
         setOrderBox(false);
     };
@@ -77,13 +125,11 @@ const SingleBook = () => {
                 {/* Book Image */}
                 <motion.div
                     whileHover={{ scale: 1.05 }}
-                    className="rounded-2xl overflow-hidden shadow-2xl"
-                >
+                    className="rounded-2xl overflow-hidden shadow-2xl">
                     <img
                         src={book?.url}
                         alt={book?.bookName}
-                        className="w-200 h-150 lg:h-100 lg:w-150 object-cover"
-                    />
+                        className="w-200 h-150 lg:h-100 lg:w-150 object-cover"/>
                 </motion.div>
 
                 {/* Book Details */}
@@ -91,8 +137,7 @@ const SingleBook = () => {
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-white dark:bg-slate-700 p-6 md:p-4 rounded-2xl shadow-xl flex flex-col justify-between"
-                >
+                    className="bg-white dark:bg-slate-700 p-6 md:p-4 rounded-2xl shadow-xl flex flex-col justify-between">
                     {/* Genre */}
                     <span className="bg-blue-600 text-white px-4 py-2 w-max rounded-xl font-semibold">
                         {book?.genra || "Loading..."}
@@ -140,8 +185,7 @@ const SingleBook = () => {
                         <motion.button
                             onClick={() => (user ? orderDialogueBox() : navigate("/Login"))}
                             whileHover={{ scale: 1.05 }}
-                            className="flex-1 px-5 py-3 bg-blue-800 text-white rounded-2xl hover:bg-blue-700 font-semibold"
-                        >
+                            className="flex-1 px-5 py-3 bg-blue-800 text-white rounded-2xl hover:bg-blue-700 font-semibold">
                             Order Now
                         </motion.button>
 
@@ -150,8 +194,7 @@ const SingleBook = () => {
                             whileTap={{ scale: 0.9 }}
                             className={`px-4 py-3 rounded-2xl ${
                                 wishList ? "bg-blue-700 text-white" : "bg-amber-100 text-gray-800"
-                            }`}
-                        >
+                            }`}>
                             <Heart />
                         </motion.button>
                     </div>
@@ -165,32 +208,28 @@ const SingleBook = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
-                    >
+                        className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
                         <motion.form
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.8, opacity: 0 }}
                             transition={{ type: "spring", stiffness: 300, damping: 25 }}
                             onSubmit={handleOrder}
-                            className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-2xl w-full max-w-lg space-y-4"
-                        >
+                            className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-2xl w-full max-w-lg space-y-4">
                             <h2 className="text-2xl font-bold dark:text-white">Place Your Order</h2>
                             <div>
                                 <label className="block text-gray-700 dark:text-gray-300">Name</label>
                                 <input
                                     className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full px-3 py-2 rounded-lg border"
                                     value={user?.displayName || ''}
-                                    readOnly
-                                />
+                                    readOnly/>
                             </div>
                             <div>
                                 <label className="block text-gray-700 dark:text-gray-300">Email</label>
                                 <input
                                     className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full px-3 py-2 rounded-lg border"
                                     value={user?.email || ''}
-                                    readOnly
-                                />
+                                    readOnly/>
                             </div>
                             <div>
                                 <label className="block text-gray-700 dark:text-gray-300">Phone</label>
@@ -199,8 +238,7 @@ const SingleBook = () => {
                                     type="number"
                                     name="phone"
                                     id='phone'
-                                    placeholder="Enter your phone number"
-                                />
+                                    placeholder="Enter your phone number"/>
                             </div>
                             <div>
                                 <label className="block text-gray-700 dark:text-gray-300">Delivery Address</label>
@@ -209,21 +247,18 @@ const SingleBook = () => {
                                     name="address"
                                     id='address'
                                     rows={3}
-                                    placeholder="Enter your delivery address"
-                                />
+                                    placeholder="Enter your delivery address"/>
                             </div>
                             <div className="flex justify-end gap-4 mt-4">
                                 <button
                                     type="submit"
-                                    className="px-6 py-3 bg-blue-800 text-white rounded-2xl hover:bg-blue-700 font-semibold"
-                                >
+                                    className="px-6 py-3 bg-blue-800 text-white rounded-2xl hover:bg-blue-700 font-semibold">
                                     Place Order
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setOrderBox(false)}
-                                    className="px-6 py-3 bg-gray-200 dark:bg-gray-700 dark:text-white rounded-2xl hover:bg-gray-300 font-semibold"
-                                >
+                                    className="px-6 py-3 bg-gray-200 dark:bg-gray-700 dark:text-white rounded-2xl hover:bg-gray-300 font-semibold">
                                     Close
                                 </button>
                             </div>
