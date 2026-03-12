@@ -28,13 +28,17 @@ const AuthProvider = ({ children }) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const SignOut = () => signOut(auth);
+  const SignOut = () => {
+    setLoading(true);
+    return signOut(auth);}
 
   const signInWithGoogle = () => {
+    setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
   const Update = ( updateData ) => {
+    setLoading(true);
     return updateProfile(auth.currentUser, updateData);
   };
 

@@ -6,7 +6,7 @@ import Load from '../Pages/Load';
 
 
 const PrivateRoute = ({ children }) => {
-    const { user, Loading } =  useContext(AuthContext);
+    const { user } =  useContext(AuthContext);
     const location = useLocation();
     localStorage.setItem(
       "redirectAfterLogin",
@@ -17,7 +17,7 @@ const PrivateRoute = ({ children }) => {
     || localStorage.getItem("redirectAfterLogin") || "/";   
     
     
-    if(Loading){
+    if(!user){
         return <Load/>
     }
     if (user) {

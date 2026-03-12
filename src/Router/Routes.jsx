@@ -20,6 +20,7 @@ import MyBooks from "../Pages/DashboardPages/MyBooks";
 import Order from "../Pages/DashboardPages/Order";
 import Payment from "../Pages/Payment";
 import PaySuccess from "../Pages/PaySuccess";
+import PayCancle from "../Pages/PayCancle";
 
 
 export const router = createBrowserRouter([
@@ -35,7 +36,8 @@ export const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
       { path: "Payment/:i", element: ( <PrivateRoute><Payment /></PrivateRoute> ) },
-      { path: "PaySuccess/:i", element: ( <PrivateRoute><PaySuccess/></PrivateRoute> )  },
+      { path: "PaySuccess", element: <PaySuccess/>  },
+      { path: "PayCancle", element: <PayCancle/>  },
       
       {
         path: "dashboard",
@@ -45,18 +47,21 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         children: [
-          { index: true, element: <Profile/>  },
-          { path: "/dashboard/profile", element: <Profile/> },
-          { path: "/dashboard/MyOrder", element: <MyOrder/> },
-          { path: "/dashboard/Invoices", element: <Invoices/> },
-          { path: "/dashboard/MyWishlist", element: <MyWishlist/> },
-          { path: "/dashboard/AddBooks", element: <AddBooks/> },
-          { path: "/dashboard/AllUsers", element: <AllUsers/> },
-          { path: "/dashboard/ManageBooks", element: <ManageBooks/> },
-          { path: "/dashboard/MyBooks", element: <MyBooks/> },
-          { path: "/dashboard/Order", element: <Order/> },
+          { index: true, element: <PrivateRoute><Profile/></PrivateRoute>  },
+          { path: "/dashboard/profile", element: <PrivateRoute><Profile/></PrivateRoute> },
+          { path: "/dashboard/MyOrder", element: <PrivateRoute><MyOrder/></PrivateRoute> },
+          { path: "/dashboard/Invoices", element: <PrivateRoute><Invoices/></PrivateRoute> },
+          { path: "/dashboard/MyWishlist", element: <PrivateRoute><MyWishlist/></PrivateRoute> },
+          { path: "/dashboard/AddBooks", element: <PrivateRoute><AddBooks/></PrivateRoute> },
+          { path: "/dashboard/AllUsers", element: <PrivateRoute><AllUsers/></PrivateRoute> },
+          { path: "/dashboard/ManageBooks", element: <PrivateRoute><ManageBooks/></PrivateRoute> },
+          { path: "/dashboard/MyBooks", element: <PrivateRoute><MyBooks/></PrivateRoute> },
+          { path: "/dashboard/Order", element: <PrivateRoute><Order/></PrivateRoute> },
         ],
       },
     ],
+    
   },
+    
+
 ]);

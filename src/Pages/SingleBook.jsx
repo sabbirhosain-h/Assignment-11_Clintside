@@ -17,7 +17,7 @@ const SingleBook = () => {
     const instance = useAPIs();
     const [book, setBook] = useState(null);
     const { id } = useParams();
-   
+
 
     useEffect(() => {
         const fetchBook = async () => {
@@ -25,63 +25,63 @@ const SingleBook = () => {
             setBook(bookData.data);
         };
         const checkWishlist = async () => {
-        try {
-            const res = await instance.get(`/MyWishlist?email=${user.email}`);
-            const alreadyAdded = res.data.some(book => book._id === id);
-            setWishList(alreadyAdded); 
-        } catch (error) {
-            console.error(error);
-        }
-    };
+            try {
+                const res = await instance.get(`/MyWishlist?email=${user.email}`);
+                const alreadyAdded = res.data.some(book => book._id === id);
+                setWishList(alreadyAdded);
+            } catch (error) {
+                console.error(error);
+            }
+        };
         fetchBook();
         if (user) checkWishlist();
     }, [id]);
-    
+
 
     const orderDialogueBox = () => setOrderBox(true);
     const wishlistButton = async () => {
-    if (!wishList) {
-        try {
-            await instance.post(`/Wishlist/${id}`);
-            setWishList(true); 
-            toast("Book Added to Wishlist", {
-                duration: 2000,
-                position: "bottom-right",
-                style: { background: '#1e293b', color: '#fff' },
-            });
-            setWishRefetch(true)
-        } catch (error) {
-            console.error("Adding to wishlist:", error);
-            toast("Failed to add to Wishlist", {
-                duration: 2000,
-                position: "bottom-right",
-                style: { background: '#ff0000', color: '#fff' },
-            });
+        if (!wishList) {
+            try {
+                await instance.post(`/Wishlist/${id}`);
+                setWishList(true);
+                toast("Book Added to Wishlist", {
+                    duration: 2000,
+                    position: "bottom-right",
+                    style: { background: '#1e293b', color: '#fff' },
+                });
+                setWishRefetch(true)
+            } catch (error) {
+                console.error("Adding to wishlist:", error);
+                toast("Failed to add to Wishlist", {
+                    duration: 2000,
+                    position: "bottom-right",
+                    style: { background: '#ff0000', color: '#fff' },
+                });
+            }
         }
-    } 
-     else {
-        try {
-          await instance.delete(`/Wishlist/remove/${id}`); 
-          setWishList(false);
-          toast("Removed from Wishlist", {
-            duration: 2000,
-            position: "bottom-right",
-            style: { background: '#1e293b', color: '#fff' },
-          });
-       } catch (error) {
-          console.error(error);
-           toast("Failed to remove from Wishlist", {
-               duration: 2000,
-               position: "bottom-right",
-               style: { background: '#ff0000', color: '#fff' },
-            });
-       }
-    }
+        else {
+            try {
+                await instance.delete(`/Wishlist/remove/${id}`);
+                setWishList(false);
+                toast("Removed from Wishlist", {
+                    duration: 2000,
+                    position: "bottom-right",
+                    style: { background: '#1e293b', color: '#fff' },
+                });
+            } catch (error) {
+                console.error(error);
+                toast("Failed to remove from Wishlist", {
+                    duration: 2000,
+                    position: "bottom-right",
+                    style: { background: '#ff0000', color: '#fff' },
+                });
+            }
+        }
     };
 
     const handleOrder = async (e) => {
         e.preventDefault();
-       
+
         try {
             const phone = e.target.phone.value;
             const address = e.target.address.value;
@@ -89,13 +89,13 @@ const SingleBook = () => {
             const url = book.url;
             const author = book.author;
             const bookName = book.bookName;
-            const price = (parseFloat(book.price) + parseFloat(book.price * 0.2));
+            const price = book.price;
 
             const email = user.email;
-            const payBookData = { id, phone , address, url, bookName, price , email ,author }
-            
+            const payBookData = { id, phone, address, url, bookName, price, email, author }
+
             const res = await instance.post("/payment", payBookData)
-           
+
         } catch (error) {
             console.error(error);
         }
@@ -129,7 +129,7 @@ const SingleBook = () => {
                     <img
                         src={book?.url}
                         alt={book?.bookName}
-                        className="w-200 h-150 lg:h-100 lg:w-150 object-cover"/>
+                        className="w-200 h-150 lg:h-100 lg:w-150 object-cover" />
                 </motion.div>
 
                 {/* Book Details */}
@@ -158,11 +158,10 @@ const SingleBook = () => {
                         {[1, 2, 3, 4, 5].map((star) => (
                             <Star
                                 key={star}
-                                className={`h-6 w-6 ${
-                                    star <= Math.round(book?.rating)
+                                className={`h-6 w-6 ${star <= Math.round(book?.rating)
                                         ? 'fill-yellow-400 text-yellow-400'
                                         : 'text-gray-300'
-                                }`}
+                                    }`}
                             />
                         ))}
                         <span className="ml-2 dark:text-white font-medium text-md">
@@ -192,9 +191,8 @@ const SingleBook = () => {
                         <motion.button
                             onClick={wishlistButton}
                             whileTap={{ scale: 0.9 }}
-                            className={`px-4 py-3 rounded-2xl ${
-                                wishList ? "bg-blue-700 text-white" : "bg-amber-100 text-gray-800"
-                            }`}>
+                            className={`px-4 py-3 rounded-2xl ${wishList ? "bg-blue-700 text-white" : "bg-amber-100 text-gray-800"
+                                }`}>
                             <Heart />
                         </motion.button>
                     </div>
@@ -222,14 +220,14 @@ const SingleBook = () => {
                                 <input
                                     className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full px-3 py-2 rounded-lg border"
                                     value={user?.displayName || ''}
-                                    readOnly/>
+                                    readOnly />
                             </div>
                             <div>
                                 <label className="block text-gray-700 dark:text-gray-300">Email</label>
                                 <input
                                     className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full px-3 py-2 rounded-lg border"
                                     value={user?.email || ''}
-                                    readOnly/>
+                                    readOnly />
                             </div>
                             <div>
                                 <label className="block text-gray-700 dark:text-gray-300">Phone</label>
@@ -237,8 +235,14 @@ const SingleBook = () => {
                                     className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full px-3 py-2 rounded-lg border"
                                     type="number"
                                     name="phone"
-                                    id='phone'
-                                    placeholder="Enter your phone number"/>
+                                    id="phone"
+                                    placeholder="Enter your phone number"
+                                    onInput={(e) => {
+                                        if (e.target.value.length > 11) {
+                                            e.target.value = e.target.value.slice(0, 11);
+                                        }
+                                    }}
+                                />
                             </div>
                             <div>
                                 <label className="block text-gray-700 dark:text-gray-300">Delivery Address</label>
@@ -247,7 +251,7 @@ const SingleBook = () => {
                                     name="address"
                                     id='address'
                                     rows={3}
-                                    placeholder="Enter your delivery address"/>
+                                    placeholder="Enter your delivery address" />
                             </div>
                             <div className="flex justify-end gap-4 mt-4">
                                 <button

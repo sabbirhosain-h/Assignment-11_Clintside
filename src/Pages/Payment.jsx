@@ -1,224 +1,123 @@
 import { CreditCard } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import {  useParams } from 'react-router';
 import useAPIs from '../Hooks/useAPIs';
 import { motion } from 'motion/react';
-import toast from 'react-hot-toast';
+import Load from './Load';
 
 const Payment = () => {
-    const [cardNum, setCardNum] = useState("");
-    const [cardName, setCardName] = useState("");
-    const [year, setYear] = useState("");
-    const [month, setMonth] = useState("");
-    const [cvv, setCvv] = useState("");
-    const navigate = useNavigate();
-    const [paymentBook, setPaymentBook] = useState("");
+  
     const [na, setNa] = useState("");
-    const [paymentId, setPaymentId] = useState(null);
 
     const instance = useAPIs();
     const { i } = useParams();
 
-    useEffect(() => {
-        const getPaymentBook = async () => {
-            const res = await instance.get(`/AllBooks/${i}`);
-            setPaymentBook(res.data);
-        }
-        getPaymentBook();
-    }, [i]);
+
+
 
     useEffect(() => {
         const getprivatedatat = async () => {
             const res = await instance.get("/payment", { params: { id: i } });
+
             setNa(res.data);
-            setPaymentId(res.data._id);
+
         };
         getprivatedatat();
     }, [i]);
 
+
+    const finalPrice = parseInt(na.price) + parseInt(na.price * 0.2)
+
     const handlepayment = async (e) => {
         e.preventDefault();
-        if (!paymentId) {
-            toast("Payment record not found", {
-              duration: 4000,
-             position: "bottom-right",
-             style: { background: '#1e293b',   color: '#fff'  },
-           })  
-           
-            return;
-        }
+        const totalPrice = parseInt(na.price) + parseInt(na.price * 0.2)
+        const Book = na.bookName;
+        const paymentInfo = { finalPrice , Book , i , totalPrice }
+        
+      
+
         try {
-            await instance.patch(`/payment/success/${i}`);
-            toast("Payment Done", {
-              duration: 4000,
-             position: "bottom-right",
-             style: { background: '#1e293b',   color: '#fff'  },
-           }) 
-           
-            navigate(`/PaySuccess/${i}`);
+            const res = await instance.post("/makePayment", paymentInfo )
+         
+            window.location.href = res.data.checkoutUrl;
         } catch (error) {
-            console.error(error);
+            console.error(error)
         }
-    };
+        };
 
-    const handleCardNumber = (e) => {
-        let raw = e.target.value.replace(/\D/g, "").slice(0, 16);
-        let formatted = raw.match(/.{1,4}/g)?.join(" ") || "";
-        setCardNum(formatted);
-    };
+        if (!na) return <Load/>;
+    
 
-    const handleCardName = (e) => {
-        const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
-        setCardName(value);
-    };
-
-    const handleCvv = (e) => {
-        const value = e.target.value.replace(/\D/g, "").slice(0, 3);
-        setCvv(value);
-    };
-
-    const handleYear = (e) => {
-        const value = e.target.value.replace(/\D/g, "").slice(0, 4);
-        setYear(value);
-    };
 
     return (
         <motion.div
-            className='grid gap-5 grid-cols-1 lg:grid-cols-2 lg:px-30 lg:py-10 px-10 py-5 max-w-5xl mx-auto'
-            initial={{ opacity: 0, y: 24 }}
+            className='grid gap-5 grid-cols-1 px-4 py-6 sm:px-8 sm:py-10 max-w-lg mx-auto'
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.45, ease: [0.22, 0.68, 0, 1.2] }}
         >
+            <h1 className='text-center font-bold text-3xl dark:text-white'>Order Summery</h1>
+            <div className='bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm'>
 
-            {/* Order Summary Card */}
-            <motion.div
-                className='bg-white dark:bg-slate-600 p-5 shadow-xl rounded-2xl w-full'
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-            >
-                <h1 className='text-md font-medium text-shadow-black dark:text-white'>Order Summary</h1>
+                {/* Book Image */}
+                <motion.img
+                    className='w-full h-56 object-cover'
+                    src={na.url}
+                    alt={na.bookName}
+                    initial={{ opacity: 0, scale: 1.03 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.55, delay: 0.1, ease: 'easeOut' }}
+                />
 
-                <div className='flex gap-5 items-center'>
-                    <img className='mt-8 h-35 w-35' src={paymentBook.url} alt="" />
-                    <div>
-                        <h1 className='text-xl font-medium text-black dark:text-white'>{paymentBook.bookName}</h1>
-                        <p className='mt-2 text-md font-md text-slate-800'>Order=#654</p>
+                <div className='p-5'>
+
+                    {/* Book Title */}
+                    <h2 className='text-base font-medium text-slate-900 dark:text-white mb-4 leading-snug'>
+                        {na.bookName}
+                    </h2>
+
+                    <div className='border-t border-slate-100 dark:border-slate-700' />
+
+                    {/* Price Breakdown */}
+                    <div className='py-4 space-y-2'>
+                        <div className='flex justify-between items-center'>
+                            <span className='text-sm text-slate-500 dark:text-slate-400'>Subtotal</span>
+                            <span className='text-sm font-medium text-slate-800 dark:text-white'>৳ {na.price}</span>
+                        </div>
+                        <div className='flex justify-between items-center'>
+                            <span className='text-sm text-slate-500 dark:text-slate-400'>Delivery fee</span>
+                            <span className='text-sm font-medium text-slate-800 dark:text-white'>৳ {parseInt(na.price * 0.2)}</span>
+                        </div>
+                        <div className='flex justify-between items-center pt-3 border-t border-slate-100 dark:border-slate-700'>
+                            <span className='text-base font-medium text-slate-900 dark:text-white'>Total</span>
+                            <span className='text-lg font-medium text-slate-900 dark:text-white'>
+                                ৳ {finalPrice}
+                            </span>
+                        </div>
                     </div>
-                </div>
 
-                <div className='devider mt-8'></div>
+                    <div className='border-t border-slate-100 dark:border-slate-700' />
 
-                <div className='mt-4 p-2'>
-                    <div className='flex items-center justify-between'>
-                        <h1 className='text-lg font-medium text-slate-500 dark:text-slate-800'>Subtotal</h1>
-                        <span className='text-lg font-medium text-black'>৳ {paymentBook.price}</span>
+                    {/* Delivery Address */}
+                    <div className='mt-4 bg-slate-50 dark:bg-slate-700 rounded-xl p-4'>
+                        <p className='text-sm font-medium text-slate-800 dark:text-white mb-1'>Delivery address</p>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 leading-relaxed'>{na.address}</p>
+                        <p className='text-sm text-slate-500 dark:text-slate-400'>{na.phone}</p>
                     </div>
-                    <div className='mt-2 flex items-center justify-between'>
-                        <h1 className='text-lg font-medium text-slate-500 dark:text-slate-800'>Delivery Fee</h1>
-                        <span className='text-lg font-medium text-black'>৳ {parseInt(paymentBook.price * 0.2)}</span>
-                    </div>
-                    <div className='mt-3 flex items-center justify-between'>
-                        <h1 className='text-3xl font-medium text-black'>Total</h1>
-                        <span className='text-3xl font-medium text-black'>
-                            ৳ {parseInt(paymentBook.price) + parseInt(paymentBook.price * 0.2)}
-                        </span>
-                    </div>
-                </div>
 
-                <div className='devider mt-8'></div>
-
-                <div className='mt-5 p-3 bg-slate-100 dark:bg-slate-700 rounded-xl'>
-                    <h1 className='text-lg font-medium text-black'>Delivery Address</h1>
-                    <p className='text-lg font-md text-slate-600 dark:text-slate-800'>{na.address}</p>
-                    <p className='text-lg font-sm text-slate-600 dark:text-slate-800'>{na.phone}</p>
-                </div>
-            </motion.div>
-
-            {/* Payment Form Card */}
-            <motion.div
-                className='bg-white dark:bg-slate-600 p-5 shadow-xl rounded-2xl min-h-screen w-full'
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-            >
-                <h1 className='flex gap-2 text-md font-medium text-shadow-black dark:text-white'>
-                    <CreditCard />
-                    Payment Details
-                </h1>
-
-                <form onSubmit={handlepayment} className='mt-5'>
-
-                    <label className='labe dark:text-white'>Card Number</label>
-                    <input
-                        className='input-field input-field:focus dark:text-white'
-                        placeholder="1234 5678 9012 3456"
-                        value={cardNum}
-                        maxLength={19}
-                        onChange={handleCardNumber}
-                        inputMode="numeric"
-                        type="text"
-                        required
-                    />
-
-                    <label className='mt-2 labe dark:text-white'>Cardholder Name</label>
-                    <input
-                        className='input-field input-field:focus dark:text-white'
-                        placeholder="Name on card"
-                        value={cardName}
-                        onChange={handleCardName}
-                        type="text"
-                        required
-                    />
-
-                    <label className='mt-2 labe dark:text-white'>Expiry Month</label>
-                    <select
-                        onChange={(e) => setMonth(e.target.value)}
-                        value={month}
-                        className='input-field input-field:focus dark:text-black'
-                        required
-                    >
-                        <option value="">Select Month</option>
-                        {["01","02","03","04","05","06","07","08","09","10","11","12"].map((m) => (
-                            <option key={m} value={m}>{m}</option>
-                        ))}
-                    </select>
-
-                    <label className='mt-2 labe dark:text-white'>Expiry Year</label>
-                    <input
-                        className='input-field input-field:focus dark:text-white'
-                        placeholder="YYYY"
-                        value={year}
-                        maxLength={4}
-                        inputMode="numeric"
-                        type="text"
-                        onChange={handleYear}
-                        required
-                    />
-
-                    <label className='mt-2 labe dark:text-white'>CVV</label>
-                    <input
-                        className='input-field input-field:focus dark:text-white'
-                        placeholder="123"
-                        value={cvv}
-                        maxLength={3}
-                        onChange={handleCvv}
-                        inputMode="numeric"
-                        type="text"
-                        required
-                    />
-
+                    {/* Pay Button */}
                     <motion.button
-                        type='submit'
-                        className='mt-5 px-3 py-2 Primary-btn w-full text-white text-2xl rounded-2xl'
-                        whileHover={{ scale: 1.02, boxShadow: "0 6px 20px rgba(0,0,0,0.15)" }}
-                        whileTap={{ scale: 0.97 }}
-                        transition={{ type: "spring", stiffness: 300 }}
+                        onClick={handlepayment}
+                        className='mt-4 w-full py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-lg font-medium tracking-wide'
+                        whileHover={{ opacity: 0.85 }}
+                        whileTap={{ scale: 0.985 }}
+                        transition={{ duration: 0.15 }}
                     >
-                        ৳ {parseInt(paymentBook.price) + parseInt(paymentBook.price * 0.2)}
+                        Pay ৳ {finalPrice}
                     </motion.button>
-                </form>
-            </motion.div>
+
+                </div>
+            </div>
         </motion.div>
     );
 };

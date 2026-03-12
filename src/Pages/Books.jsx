@@ -3,10 +3,12 @@ import { Link, useLocation } from 'react-router';
 import { motion } from "motion/react"
 import { Star } from 'lucide-react';
 import useAPIs from '../Hooks/useAPIs';
+import Load from './Load';
 
 
 const Books = () => {
     const location = useLocation();
+    const [loading, setLoading] = useState(false);
     const [search , setSearch] = useState("");
     const [sortBy , setSortBy] = useState("bookName");
     const [order , setOrder] = useState("asc");
@@ -23,6 +25,7 @@ const Books = () => {
     useEffect(()=>{
       const getAllBooks = async () => {
         try {
+          setLoading(true);
           const res = await instance.get(`/AllBooks?skip=${currentPage * limit}&limit=${limit}&sort=${sortBy}&order=${order}&search=${search}`);
           
           setAllBooks(res.data.result);
@@ -34,6 +37,8 @@ const Books = () => {
 
         } catch (error) {
           console.log(error);
+        } finally {
+            setLoading(false); 
         }
       }
       getAllBooks();
@@ -43,6 +48,11 @@ const Books = () => {
     useEffect(() => {
       localStorage.setItem("redirectAfterLogin", location.pathname);
     }, [location.pathname]);
+
+
+    if(loading){
+      return <Load/>
+    }
     return (
         <motion.div
             initial={{ opacity: 0 }}
