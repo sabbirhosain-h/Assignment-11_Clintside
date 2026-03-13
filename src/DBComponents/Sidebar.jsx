@@ -7,7 +7,7 @@ import ThemeContext from "../Context/CreateContext";
 const Sidebar = () => {
   const { user } = useContext(AuthContext);
   
-//   const role = user?.role;
+
   const {isClose , setIsClose} = useContext(ThemeContext);
 
   const Userdashboard = [
@@ -21,15 +21,21 @@ const Sidebar = () => {
     { path: "/dashboard/MyBooks" , label: "My Books", icon: <Book/>  },
     { path: "/dashboard/Order" , label: "Order", icon: <ShoppingBagIcon/>  },
   ];
+  const userDB = [
+     { path: "/dashboard/profile" , label: "My Profile", icon: <User/>  },
+     { path: "/dashboard/MyOrder" , label: "My Order" , icon: <ShoppingBag/>},
+     { path: "/dashboard/Invoices" , label: "Invoices", icon: <ReceiptIcon/>  },
+     { path: "/dashboard/MyWishlist" , label: "My Wishlist", icon: <Heart/>  },
+  ]; 
 
-  const librarian = [
+  const librarianDB = [
       { path: "/dashboard/AddBooks" , label: "Add New", icon: <Plus/>  },
       { path: "/dashboard/MyBooks" , label: "My Books", icon: <Book/>  },
       { path: "/dashboard/Order" , label: "Order", icon: <ShoppingBagIcon/>  },
       { path: "/dashboard/profile" , label: "My Profile", icon: <User/>  },
       
   ];
-  const admin = [
+  const adminDB = [
     { path: "/dashboard/AllUsers" , label: "All Users", icon: <User2/>  },
     { path: "/dashboard/ManageBooks" , label: "Manage Books", icon: <Library/>  },
     { path: "/dashboard/profile" , label: "My Profile", icon: <User/>  },
@@ -38,6 +44,8 @@ const Sidebar = () => {
   const close = () => {
       setIsClose(!isClose)
   };
+
+
   return (
     <nav className="flex flex-col">
 

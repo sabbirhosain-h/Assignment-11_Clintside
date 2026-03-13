@@ -8,11 +8,8 @@ import Load from './Load';
 const Payment = () => {
   
     const [na, setNa] = useState("");
-
     const instance = useAPIs();
     const { i } = useParams();
-
-
 
 
     useEffect(() => {
@@ -31,10 +28,12 @@ const Payment = () => {
     const handlepayment = async (e) => {
         e.preventDefault();
         const totalPrice = parseInt(na.price) + parseInt(na.price * 0.2)
+        const bookId = na.bookId;
+        console.log(na ,bookId)
         const Book = na.bookName;
-        const paymentInfo = { finalPrice , Book , i , totalPrice }
+        const paymentInfo = { finalPrice , Book , i , totalPrice , bookId  }
         
-      
+        // console.log(i,bookId)
 
         try {
             const res = await instance.post("/makePayment", paymentInfo )

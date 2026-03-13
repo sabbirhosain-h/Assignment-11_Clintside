@@ -29,10 +29,10 @@ const MyOrder = () => {
     try {
       await instance.patch(`/payment/cancel/${orderId}`);
       toast("Order Cancled!", {
-                    duration: 4000,
-                   position: "bottom-right",
-                   style: { background: '#1e293b',   color: '#fff'  },
-                 }) 
+            duration: 4000,
+            position: "bottom-right",
+            style: { background: '#1e293b',   color: '#fff'  },
+          }) 
       getAllOrderData();
     } catch (error) {
       console.error(error);
