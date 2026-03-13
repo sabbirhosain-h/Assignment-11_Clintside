@@ -22,7 +22,7 @@ const Navber = () => {
         SignOut();
         Navigate("/");
    }
-   
+  
     return (
         <nav className='lg:flex sticky top-0 z-50 w-full max-w-full mx-auto bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60'>
 
