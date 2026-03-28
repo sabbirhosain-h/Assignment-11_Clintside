@@ -96,7 +96,7 @@ const AllUsers = () => {
                                             <span className='font-medium dark:text-white'>{user.username}</span>
                                         </div>
                                     </td>
-                                    <td className='px-4 py-3 text-gray-600 dark:text-gray-300'>{user.email}</td>
+                                   <td className='px-4 py-3 text-gray-600 dark:text-gray-300'>{user.email}</td>
                                     <td className='px-4 py-3'>
                                         <RoleBadge role={user.role || "user"} />
                                     </td>
