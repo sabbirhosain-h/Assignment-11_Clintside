@@ -4,9 +4,11 @@ import useAPIs from '../../Hooks/useAPIs';
 import { AuthContext } from '../../Context/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
+import useSecure from '../../Hooks/useSecure';
 
 const MyOrder = () => {
   const instance = useAPIs();
+  const secure = useSecure();
   const { user } = useContext(AuthContext);
   const [allOrders, setAllOrders] = useState([]);
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ const MyOrder = () => {
 
   const getAllOrderData = async () => {
     try {
-      const res = await instance.get("/MyOrders", { params: { e: user.email } });
+      const res = await secure.get("/MyOrders", { params: { e: user.email } });
       setAllOrders(res.data);
     } catch (error) {
       console.error(error);
@@ -27,7 +29,7 @@ const MyOrder = () => {
 
   const cancelOrder = async (orderId) => {
     try {
-      await instance.patch(`/payment/cancel/${orderId}`);
+      await secure.patch(`/payment/cancel/${orderId}`);
       toast("Order Cancled!", {
             duration: 4000,
             position: "bottom-right",

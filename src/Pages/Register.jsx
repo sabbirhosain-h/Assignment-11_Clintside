@@ -1,9 +1,11 @@
 import React, { use, useState } from 'react';
 import { motion } from "motion/react"
 import { CheckCircle, EyeIcon, EyeOff, ImageUp, XCircle } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { AuthContext } from '../Context/AuthProvider';
 import useImageUpload from '../Hooks/useImageUpload ';
+import useSecure from '../Hooks/useSecure';
+import toast from 'react-hot-toast';
 
 
 const Register = () => {
@@ -12,22 +14,33 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const Naviagte = useNavigate();
-  const Location = useLocation();
-  const [url, setUrl] = useState(null);   // ✅ stores final imgBB URL
+  const [url, setUrl] = useState(null);
   const [fileName, setFileName] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const uploadImage = useImageUpload();
   const redirectPath = location.state?.from?.pathname
     || localStorage.getItem("redirectAfterLogin") || "/";
 
   const { setUser, register, signInWithGoogle, Update } = use(AuthContext);
+  const secure = useSecure();
+
 
 
   const uploadPic = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    setFileName(file.name); 
-    const Url = await uploadImage(file);
-    setUrl(Url); 
+    setFileName(file.name);
+    setUploading(true);
+    setUrl(null);
+    try {
+      const Url = await uploadImage(file);
+      setUrl(Url);
+    } catch (err) {
+      console.error("Image upload failed:", err);
+      setFileName(null);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const passwordValidation = {
@@ -37,6 +50,7 @@ const Register = () => {
   };
 
   const isPasswordValid = passwordValidation.minLength && passwordValidation.hasUpperCase && passwordValidation.hasLowerCase;
+
 
 
   const handleSubmit = async (e) => {
@@ -49,12 +63,13 @@ const Register = () => {
 
     try {
 
-      const result = await register(email, password);
+      const result = await register(email, password)
       const newUser = result.user;
 
-
       await Update(newUser, username, url || null);
-
+      const userInfo = { email, username, url: url || null };
+      console.log(userInfo)
+      await secure.post("/users", userInfo);
 
       setUser({
         ...newUser,
@@ -64,25 +79,55 @@ const Register = () => {
 
       e.target.reset();
 
-    } catch (error) {
-      console.error("Registration Error:", error);
-    } finally {
-      setLoading(false);
       Naviagte(redirectPath, { replace: true });
       localStorage.removeItem("redirectAfterLogin");
+
+    } catch (error) {
+      const errorMessages = {
+        "auth/email-already-in-use": "This email is already registered.",
+        "auth/invalid-email": "Invalid email address.",
+        "auth/weak-password": "Password is too weak.",
+        "auth/network-request-failed": "Network error. Check your connection.",
+      };
+
+      const code = error.code; 
+      toast.error(`${error ? (errorMessages[code]) : ("Something went wrong. Please try again.")} `, {
+        position: "top-center",
+        reverseOrder: "true"
+      });
+
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleGoogleSignUp = () => {
     signInWithGoogle()
-      .then(result => {
+      .then(async (result) => {
         const googleuser = result.user
         setUser(googleuser)
+        const email = googleuser.email;
+        const username = googleuser.displayName;
+        const url = googleuser.photoURL;
+        const googleUserinfo = { email, username, url };
+        await secure.post("/users", googleUserinfo);
         Naviagte(redirectPath, { replace: true });
         localStorage.removeItem("redirectAfterLogin");
       })
       .catch((error) => {
-        alert("Google register error: " + error.message);
+        const errorMessages = {
+          "auth/popup-closed-by-user": "Sign-in popup was closed.",
+          "auth/popup-blocked": "Popup blocked by browser. Allow popups and try again.",
+          "auth/cancelled-popup-request": "Sign-in was cancelled.",
+          "auth/network-request-failed": "Network error. Check your connection.",
+          "auth/account-exists-with-different-credential": "An account already exists with this email.",
+        };
+
+        const code = error.code;
+        toast.error(`${error ? (errorMessages[code]) : ("Something went wrong. Please try again.")} `, {
+          position: "top-center",
+          reverseOrder: "true"
+        });
       })
 
   };
@@ -136,14 +181,20 @@ const Register = () => {
             <div className='cursor-pointer input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white'>
               <label className="flex justify-start items-center gap-3 cursor-pointer">
                 <ImageUp className="w-6 h-6 shrink-0 text-slate-400" />
+
                 <span className="text-sm truncate text-slate-500 dark:text-slate-300">
-                  {fileName
-                    ? fileName
+                  {uploading
+                    ? "Uploading..."
                     : url
-                      ? "Uploading..."
-                      : "Upload profile picture"}
+                      ? fileName
+                      : fileName
+                        ? fileName
+                        : "Upload profile picture"}
                 </span>
-                {url && (
+                {uploading && (
+                  <div className="ml-auto w-4 h-4 border-2 border-slate-300 border-t-indigo-500 rounded-full animate-spin" />
+                )}
+                {url && !uploading && (
                   <span className="ml-auto text-xs text-green-500">✓ Ready</span>
                 )}
                 <input
@@ -162,9 +213,9 @@ const Register = () => {
           <div className="mb-4">
             <label className="relative block text-sm font-medium text-gray-700 dark:text-gray-300">Password
 
-              <buttton onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-9 text-gray-500 hover:text-gray-500">
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-9 text-gray-500 hover:text-gray-500">
                 {showPassword ? <EyeOff className="w-5 h-5 sm:w-5 cursor-pointer" /> : <EyeIcon className="w-5 h-5 sm:w-5 cursor-pointer" />}
-              </buttton>
+              </button>
             </label>
             <input
               onChange={(e) => setPassword(e.target.value)}
