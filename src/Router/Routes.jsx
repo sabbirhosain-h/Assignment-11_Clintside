@@ -21,6 +21,7 @@ import Order from "../Pages/DashboardPages/Order";
 import Payment from "../Pages/Payment";
 import PaySuccess from "../Pages/PaySuccess";
 import PayCancle from "../Pages/PayCancle";
+import EditBook from "../Pages/DashboardPages/EditBook";
 
 
 export const router = createBrowserRouter([
@@ -57,6 +58,7 @@ export const router = createBrowserRouter([
           { path: "/dashboard/ManageBooks", element: <PrivateRoute><ManageBooks/></PrivateRoute> },
           { path: "/dashboard/MyBooks", element: <PrivateRoute><MyBooks/></PrivateRoute> },
           { path: "/dashboard/Order", element: <PrivateRoute><Order/></PrivateRoute> },
+          { path: "/dashboard/EditBook/:id", element: <EditBook /> }
         ],
       },
     ],
