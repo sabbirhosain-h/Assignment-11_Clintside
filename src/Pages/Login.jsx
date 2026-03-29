@@ -4,6 +4,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { AuthContext } from '../Context/AuthProvider';
 import { useLocation, useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
+import { auth } from '../Firebase/Authinit'; // ✅ import auth
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -29,7 +30,8 @@ const Login = () => {
 
         try {
             const result = await signIn(email, password);
-            setUser(result.user);
+            await result.user.reload();                // ✅ reload to get fresh profile
+            setUser(auth.currentUser);                 // ✅ use refreshed user
 
             e.target.reset();
             navigate(redirectPath, { replace: true });
@@ -51,7 +53,6 @@ const Login = () => {
                 reverseOrder: "true"
             });
 
-
         } finally {
             setLoading(false);
         }
@@ -61,7 +62,8 @@ const Login = () => {
         setError("");
         try {
             const result = await signInWithGoogle();
-            setUser(result.user);
+            await result.user.reload();                // ✅ reload to get fresh profile
+            setUser(auth.currentUser);                 // ✅ use refreshed user
             navigate(redirectPath, { replace: true });
             localStorage.removeItem("redirectAfterLogin");
         } catch (error) {
@@ -78,7 +80,6 @@ const Login = () => {
                 position: "top-center",
                 reverseOrder: "true"
             });
-           
         }
     }
 
@@ -100,8 +101,6 @@ const Login = () => {
 
                 <h2 className="ml-4 text-xl font-bold dark:text-white text-black mt-3">Welcome to LibrisGo</h2>
                 <p className="dark:text-white text-black mt-2">Sign in to your account to continue</p>
-
-
 
                 <form onSubmit={handleSubmit} className="w-full mt-4">
 

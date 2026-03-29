@@ -90,9 +90,9 @@ const SingleBook = () => {
             const author = book.author;
             const bookName = book.bookName;
             const price = book.price;
-
+            const buyerName = user?.displayName;
             const email = user.email;
-            const payBookData = { id, phone, address, url, bookName, price, email, author }
+            const payBookData = { buyerName, id, phone, address, url, bookName, price, email, author }
 
             const res = await instance.post("/payment", payBookData)
 

@@ -27,7 +27,7 @@ const useSecure = () => {
                     navigate("Login")
                 })
             }
-            return Promise.eject(error);
+            return Promise.reject(error);
         });
         return () => {
             axiosSecure.interceptors.request.eject(requestInterseptor);

@@ -63,19 +63,14 @@ const Register = () => {
 
     try {
 
-      const result = await register(email, password)
-      const newUser = result.user;
+      await register(email, password);
 
-      await Update(newUser, username, url || null);
+      await Update({ displayName: username, photoURL: url || null }); 
+
       const userInfo = { email, username, url: url || null };
-      console.log(userInfo)
+      
       await secure.post("/users", userInfo);
 
-      setUser({
-        ...newUser,
-        displayName: username,
-        photoURL: url || null
-      });
 
       e.target.reset();
 
@@ -90,7 +85,7 @@ const Register = () => {
         "auth/network-request-failed": "Network error. Check your connection.",
       };
 
-      const code = error.code; 
+      const code = error.code;
       toast.error(`${error ? (errorMessages[code]) : ("Something went wrong. Please try again.")} `, {
         position: "top-center",
         reverseOrder: "true"

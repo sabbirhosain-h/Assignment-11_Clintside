@@ -15,7 +15,6 @@ const EditBook = () => {
     const secure = useSecure();
     const navigate = useNavigate();
     const uploadImage = useImageUpload();
-
     const [imageUrl, setImageUrl] = useState(null);
     const [fileName, setFileName] = useState(null);
     const [uploading, setUploading] = useState(false);

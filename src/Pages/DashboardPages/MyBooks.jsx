@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router';
 import { AuthContext } from '../../Context/AuthProvider';
+import  Load  from '../Load';
 
 const MyBooks = () => {
     const secure = useSecure();
@@ -21,9 +22,7 @@ const MyBooks = () => {
     });
 
     if (isLoading) return (
-        <div className="flex justify-center items-center h-40">
-            <div className="w-6 h-6 border-2 border-slate-300 border-t-indigo-500 rounded-full animate-spin" />
-        </div>
+        <Load/>
     );
 
     return (
@@ -31,7 +30,7 @@ const MyBooks = () => {
             <h1 className='text-3xl font-bold dark:text-white'>My Books</h1>
             <p className='text-sm text-gray-400 mt-1'>Manage books you've added</p>
 
-            <div className='bg-white dark:bg-slate-900 p-4 md:p-8 mt-4 rounded-2xl'>
+            <div className='bg-white dark:bg-slate-900 p-4 md:p-8 mt-4 rounded-t-2xl'>
                 <div className='flex items-center justify-between mb-5'>
                     <h2 className='font-semibold text-xl dark:text-white'>
                         {myBooks.length} Books

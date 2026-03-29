@@ -39,7 +39,7 @@ const PaySuccess = () => {
                 email: user.email,
             };
             const res = await instance.post("/Invoice", invoice);
-            console.log("invoice response:", res.data);
+          
             setInvoiceSaved(true);
             toast("Payment Done", {
                 duration: 4000,

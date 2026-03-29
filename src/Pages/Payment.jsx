@@ -29,7 +29,7 @@ const Payment = () => {
         e.preventDefault();
         const totalPrice = parseInt(na.price) + parseInt(na.price * 0.2)
         const bookId = na.bookId;
-        console.log(na ,bookId)
+        
         const Book = na.bookName;
         const paymentInfo = { finalPrice , Book , i , totalPrice , bookId  }
         
