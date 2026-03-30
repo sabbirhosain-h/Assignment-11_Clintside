@@ -1,8 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../Context/AuthProvider';
 import toast from 'react-hot-toast';
 import { ImageUp } from 'lucide-react';
 import useImageUpload from '../../Hooks/useImageUpload ';
+import useSecure from '../../Hooks/useSecure';
 
 
 const Profile = () => {
@@ -10,8 +11,25 @@ const Profile = () => {
     const [name, setName] = useState(user.displayName || "")
     const [imageFile, setImageFile] = useState(null);
     const uploadImage = useImageUpload();
+    const [role,setRole] = useState([]);
+    const [loading, setLoading] = useState(true);
 
+    const secure = useSecure();
 
+     useEffect(() => {
+        const fetchRole = async () => {
+          try {
+            const res = await secure.get("/Role");
+            setRole(res.data);
+          } catch (error) {
+            console.error(error);
+          } finally {
+            setLoading(false);
+          }
+        };
+    
+        fetchRole();
+      }, [secure]);
 
 
 
@@ -69,7 +87,7 @@ const Profile = () => {
                         <p className="text-muted-foreground mb-2">{user.email}</p>
 
                         <span className='bg-blue-800 text-white px-2 py-1 rounded-2xl'>
-                            User
+                            {role}
                         </span>
                     </div>
                 </div>
@@ -122,7 +140,7 @@ const Profile = () => {
                         <label className='block label  dark:text-gray-300'>Role</label>
                         <input
                             className='input-field input-field:focus dark:bg-gray-700 dark:border-gray-600 dark:text-white'
-                            value="User"
+                            value={role}
                             readOnly
                             type="text" />
                         <span className='text-sm font-light ml-3 dark:text-amber-50'>Only Admin can change Role**</span>

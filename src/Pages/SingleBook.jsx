@@ -236,6 +236,7 @@ const SingleBook = () => {
                                     type="number"
                                     name="phone"
                                     id="phone"
+                                    required
                                     placeholder="Enter your phone number"
                                     onInput={(e) => {
                                         if (e.target.value.length > 11) {
@@ -250,6 +251,7 @@ const SingleBook = () => {
                                     className="input-field dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full px-3 py-2 rounded-lg border"
                                     name="address"
                                     id='address'
+                                    required
                                     rows={3}
                                     placeholder="Enter your delivery address" />
                             </div>

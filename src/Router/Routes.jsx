@@ -58,7 +58,7 @@ export const router = createBrowserRouter([
           { path: "/dashboard/ManageBooks", element: <PrivateRoute><ManageBooks/></PrivateRoute> },
           { path: "/dashboard/MyBooks", element: <PrivateRoute><MyBooks/></PrivateRoute> },
           { path: "/dashboard/Order", element: <PrivateRoute><Order/></PrivateRoute> },
-          { path: "/dashboard/EditBook/:id", element: <EditBook /> }
+          { path: "/dashboard/EditBook/:id", element: <PrivateRoute><EditBook /></PrivateRoute> }
         ],
       },
     ],

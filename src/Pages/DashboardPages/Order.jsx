@@ -15,7 +15,7 @@ const Order = () => {
         queryKey: ["manageOrder"],
         queryFn: async () => {
             const res = await secure.get("/manageOrder");
-            console.log(res.data)
+           
             return res.data;
         },
     });

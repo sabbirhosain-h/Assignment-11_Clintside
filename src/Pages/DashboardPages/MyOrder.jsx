@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { motion } from "motion/react"
-import useAPIs from '../../Hooks/useAPIs';
 import { AuthContext } from '../../Context/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router';
 import toast from 'react-hot-toast';
 import useSecure from '../../Hooks/useSecure';
 
 const MyOrder = () => {
-  const instance = useAPIs();
   const secure = useSecure();
   const { user } = useContext(AuthContext);
   const [allOrders, setAllOrders] = useState([]);
@@ -110,7 +108,7 @@ const MyOrder = () => {
                   </td>
 
                   {/* Price */}
-                  <td className="px-4 py-3 font-medium dark:text-white">{order.price}</td>
+                  <td className="px-4 py-3 font-medium dark:text-white"> ৳ {order.price}</td>
 
                   {/* Status */}
                   <td className="px-4 py-3">

@@ -30,6 +30,8 @@ createRoot(document.getElementById('root')).render(
             </DataProvider>
          </QueryClientProvider>
       </AuthProvider>
+
+      
   
   </StrictMode>,
 )
