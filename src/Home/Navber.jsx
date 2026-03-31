@@ -34,7 +34,7 @@ const Navber = () => {
              <div className='flex gap-4 items-center shrink-0'>
                         <Link to='/' className='flex items-center gap-4 group'>
                             <div className=''>
-                                <img src='../../public/Librisgo.jpg' className='w-10 h-10 rounded-xl flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 shadow-md text-white '/>
+                                <img src='/Librisgo.jpg' className='w-10 h-10 rounded-xl flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 shadow-md text-white '/>
                             </div>
                             <span className='text-xl dark:text-white font-semibold text-black sm:block group-hover:text-[#0077b6] transition-colors'>
                                 LibrisGo

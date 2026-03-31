@@ -1,37 +1,30 @@
 import { NavLink } from "react-router";
 import { AuthContext } from "../Context/AuthProvider";
-import {Book, Heart, LayoutDashboardIcon, Library, MoveRightIcon, Plus, ReceiptIcon, ShoppingBag, ShoppingBagIcon, User, User2, X,} from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { Book, Heart, LayoutDashboardIcon, Library, MoveRightIcon, Plus, ReceiptIcon, ShoppingBag, ShoppingBagIcon, User, User2, X } from "lucide-react";
+import { useContext, useEffect } from "react";
 import ThemeContext from "../Context/CreateContext";
+import { useQuery } from "@tanstack/react-query";
 import useSecure from "../Hooks/useSecure";
-import Load from "../Pages/Load";
+
 
 const Sidebar = () => {
   const { user } = useContext(AuthContext);
   const { isClose, setIsClose } = useContext(ThemeContext);
+ 
+
   const secure = useSecure();
-
-  const [role, setRole] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchRole = async () => {
-      try {
-        const res = await secure.get("/Role");
-        setRole(res.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRole();
-  }, [secure]);
-
-  if (loading) return <Load />;
+  const { data: role, isLoading } = useQuery({
+    queryKey: ["userRole"],
+    queryFn: async () => {
+      const res = await secure.get("/Role");
+      return res.data;
+    },
+    enabled: !!user,
+  });
 
  
+
+
 
   const userDB = [
     { path: "/dashboard/profile", label: "My Profile", icon: <User /> },
@@ -53,13 +46,16 @@ const Sidebar = () => {
     { path: "/dashboard/profile", label: "My Profile", icon: <User /> },
   ];
 
-  
   let menu = userDB;
 
   if (role === "admin") {
     menu = adminDB;
   } else if (role === "librarian") {
     menu = librarianDB;
+  }
+
+  if (isLoading) {
+    return <span className="loading loading-ring loading-2xl"></span>;
   }
 
   return (
@@ -99,10 +95,9 @@ const Sidebar = () => {
             to={links.path}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-3 rounded-lg border-b
-              ${
-                isActive
-                  ? "bg-blue-600 text-white"
-                  : "text-black dark:text-white"
+              ${isActive
+                ? "bg-blue-600 text-white"
+                : "text-black dark:text-white"
               }
               hover:bg-amber-300`
             }

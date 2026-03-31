@@ -4,6 +4,7 @@ import { motion } from "motion/react"
 import { Star } from 'lucide-react';
 import useAPIs from '../Hooks/useAPIs';
 import Load from './Load';
+import useSecure from '../Hooks/useSecure';
 
 
 const Books = () => {
@@ -18,6 +19,8 @@ const Books = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const limit = 6;
 
+  
+  const secuere = useSecure();
   const instance = useAPIs();
 
 

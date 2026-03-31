@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import useAPIs from "../Hooks/useAPIs";
+import useSecure from "../Hooks/useSecure";
 
 export const DataContext = createContext();
 
@@ -10,6 +11,7 @@ const DataProvider = ({children}) => {
     
 
     const instance = useAPIs();
+    const secure = useSecure();
     useEffect(()=>{
         const getAllBooks = async () => {
             try {

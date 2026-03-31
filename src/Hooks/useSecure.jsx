@@ -1,40 +1,54 @@
 import axios from "axios";
 import { useContext, useEffect } from "react";
-import {AuthContext} from "../Context/AuthProvider"
-import { useNavigate } from "react-router";
+import { AuthContext } from "../Context/AuthProvider";
+import { Navigate } from "react-router";
+
 
 const axiosSecure = axios.create({
-    baseURL: "http://localhost:3000"
-})
+  baseURL: "https://librisgo.vercel.app",
+});
 
 const useSecure = () => {
-    const {user, signOut} = useContext(AuthContext);
-    const token = user?.accessToken;
-    const navigate = useNavigate();
-  
-    useEffect(()=>{
-        const requestInterseptor = axiosSecure.interceptors.request.use(config => {
-            config.headers.Authorization = `Bearer ${token}`
-            return config;
-        });
-        const responseInterseptor = axiosSecure.interceptors.response.use(function onSuccess(response) {return response } , 
-        function onFail(error) {
-            
-            const errorCode = error.sratus;
-            if (errorCode === 401 || errorCode === 403){
-                
-                signOut().then(()=> {
-                    navigate("Login")
-                })
-            }
-            return Promise.reject(error);
-        });
-        return () => {
-            axiosSecure.interceptors.request.eject(requestInterseptor);
-            axiosSecure.interceptors.response.eject(responseInterseptor);
+  const { user, signOut } = useContext(AuthContext);
+//   const navigate = useNavigate();
+
+  useEffect(() => {
+   
+    const requestInterceptor = axiosSecure.interceptors.request.use(
+      (config) => {
+        if (user?.accessToken) {
+          config.headers.authorization = `Bearer ${user.accessToken}`;
         }
-    },[user])
-    return axiosSecure;
-}
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+   
+    const responseInterceptor = axiosSecure.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        const status = error?.response?.status;
+
+        if (status === 401 || status === 403) {
+          signOut().then(() => {
+            Navigate("/Login")
+          
+          });
+        }
+
+        return Promise.reject(error);
+      }
+    );
+
+ 
+    return () => {
+      axiosSecure.interceptors.request.eject(requestInterceptor);
+      axiosSecure.interceptors.response.eject(responseInterceptor);
+    };
+  }, [user, signOut]);
+
+  return axiosSecure;
+};
 
 export default useSecure;

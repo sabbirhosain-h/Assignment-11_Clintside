@@ -177,7 +177,7 @@ const MyOrder = () => {
                     {new Date(order.createdAt).toISOString().split("T")[0]}
                   </p>
                 </div>
-                <p className="font-bold text-slate-800 dark:text-white text-lg shrink-0">{order.price}</p>
+                <p className="font-bold text-slate-800 dark:text-white text-lg shrink-0">৳ {order.price}</p>
               </div>
 
               {/* Badges */}

@@ -29,7 +29,7 @@ const Profile = () => {
         };
     
         fetchRole();
-      }, [secure]);
+      }, [secure ]);
 
 
 

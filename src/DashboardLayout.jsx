@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from './DBComponents/Sidebar';
 import { Outlet } from 'react-router';
 import ThemeContext from './Context/CreateContext';
-import useSecure from './Hooks/useSecure';
-import Load from './Pages/Load';
+
 
 const DashboardLayout = () => {
   const { isClose } = useContext(ThemeContext);
@@ -17,7 +16,6 @@ const DashboardLayout = () => {
           isClose ? "lg:w-20" : "lg:w-64"
         } border border-blue-300 bg-slate-100 dark:bg-slate-900`}
       >
-       
         <Sidebar/>
       </aside>
 
